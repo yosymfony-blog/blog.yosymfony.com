@@ -1,0 +1,23 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - Symfony
+tags:
+    - 'symfony 2.3'
+    - symfony2
+permalink: /otro-componente-desacoplado-en-symfony2-el-debug
+no_html_extension: true
+layout: post
+title: 'Otro componente desacoplado en Symfony2: el debug'
+
+---
+<img class="alignnone size-full wp-image-62" alt="symfony2-logo" src="/assets/wp-content/uploads/2013/01/symfony2-logo.png" width="255" height="73" />Ayer, <strong>Fabien Potencier</strong> publicó una entrada en el blog oficial de Symfony en la que anunciaba <a href="http://symfony.com/blog/new-in-symfony-2-3-new-debug-component" target="_blank"><strong>otro componente que se puede utilizar fuera del entorno Symfony</strong></a>. Se trata del <a href="https://github.com/symfony/Debug" target="_blank"><strong>debug</strong></a>, que se ha extraído del <em>HttpKernel</em> para que pueda ser usado en cualquier otro proyecto PHP simplemente incluyendo la dependencia en <code class="prettyprint">composer.json</code>. Sin duda es una buena noticia que sigue la línea de actuación iniciada con Symfony2: <strong>Crear componentes desacoplados y reutilizables que hacen  lo que se espera de ellos de forma correcta</strong>. Se trata de confeccionar un framework que es la suma de todos sus componentes interactuando entre sí en perfecta armonía. Esta nueva línea de pensamiento está consiguiendo que <strong>Symfony se convierta en el framework que permite crear otros framework</strong>. Grandes proyectos de Internet como <a title="Symfony2 en el corazón de otros framework" href="/symfony2-en-el-corazon-de-otros-framework" target="_blank">Laravel, PhpBB o Magento</a> usan en mayor o menor medida componentes de Symfony. Aplaudo que el equipo de Symfony esté realizando este trabajo y los resultados se ven cada día. Muestra de ello es que <a href="http://symfony.es/noticias/2012/12/31/symfony-ya-es-el-framework-php-m%C3%A1s-popular-del-mundo/" target="_blank"><strong>Symfony ya es el framework más popular del mundo</strong></a> tal y como demuestra Google Trends agrupando los términos de búsqueda Symfony y Symfony2.
+
+<!--more-->
+
+<strong>Gran parte del éxito de Symfony2 como corazón de otros framework y proyectos se debe a <a href="http://getcomposer.org/" target="_blank">Composer</a></strong>, una herramienta extraordinaria que hace que incluir dependencias en un proyecto PHP sea sencillo. Con una nomenclatura simple, podemos describir en formato <em>json</em> aquellos componentes que necesita nuestra solución junto con los datos de la versión. Composer se encargará de descargar e instalar, además de permitir actualizar en cualquier momento.
+
+Del fichero de información de dependencias (<em>composer.json</em>) se pueden destilar más usos, como por ejemplo, comprobar que componentes tienen problemas de seguridad registrados. Y para ello, <a title="¿Son seguras las dependencias de tu aplicación Symfony2?" href="/son-seguras-las-dependencias-de-tu-aplicacion-symfony2" target="_blank">Sendio Labs</a> presentó una interesante aplicación para permitir comprobar este tipo de archivos de forma online o con una API REST.
+
+Como nota final, me encantaría ver a <a href="http://wordpress.org/" target="_blank"><strong>Wordpress</strong></a> usando componentes de Symfony2.

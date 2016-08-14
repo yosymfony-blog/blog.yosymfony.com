@@ -1,0 +1,64 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+    - Symfony
+tags:
+    - seguridad
+    - xss
+permalink: /seguridad-consejos-para-evitar-el-cross-site-scripting-en-php
+no_html_extension: true
+layout: post
+title: 'Seguridad: Consejos para evitar el Cross-Site Scripting en PHP'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" />Dejo algunos consejos que leí el otro día en una entrada publicada en el <a href="http://blog.astrumfutura.com/2013/04/20-point-list-for-preventing-cross-site-scripting-in-php/" target="_blank"><strong>blog de P<em>ádraic Brady</em> titulada "<em>20 Point List For Preventing Cross-Site Scripting In PHP</em>"</strong></a> Consejos que no conviene olvidar por mucho framework que usemos. Algunos de ellos son propios de PHP y otros se pueden aplicar a cualquier otro lenguaje. Como siempre, el sentido común es muy importante.
+
+<!--more-->
+<ul>
+	<li><span style="line-height: 13px;"><strong>Nunca muestres directamente el contenido obtenido de sitios no seguros</strong> sin realizar previamente un escapado de los datos.</span></li>
+	<li>Siempre <strong>validar los datos de entrada</strong>.</li>
+	<li>Cualquier dato que no esté de forma explícita en el código, es considerado como dato de origen no seguro.</li>
+	<li>La función <strong><a href="http://www.php.net/manual/en/function.htmlentities.php" target="_blank">htmlentities()</a></strong>, que convierte caracteres a su equivalente en <em>entidades HTML</em>, también es válida para datos XML. En caso de serializar XMLs, además usar <a href="http://www.php.net/manual/en/function.htmlspecialchars.php" target="_blank"><strong>htmlspecialchars()</strong></a> que se encarga de escapar caracteres con significado especial como &gt;,&lt;, &amp; o las comillas.</li>
+	<li>Siempre usar los flags <em><strong>ENT_QUOTES, ENT_SUBSTITUT</strong> </em>en la función <strong><a href="http://www.php.net/manual/en/function.htmlspecialchars.php" target="_blank">htmlspecialchars()</a></strong>. La primera opción permite convertir comillas simples y dobles. La segunda evita devolver un string vacío en las secuencias inválidas de caracteres. También es muy recomendable validar la codificación de la cadena de entrada. Desde PHP &gt;=5.4 la codificación por defecto es UTF-8.</li>
+	<li><strong>No usar <a href="http://www.php.net/manual/en/function.htmlspecialchars.php" target="_blank">htmlspecialchars()</a> como único medio para escapar recursos</strong> como Javascript, CSS o partes de una URL.</li>
+	<li>No usar<strong><a href="http://www.php.net/manual/en/function.json-encode.php" target="_blank"> json_encode()</a> </strong>para escapar string con Javascript.</li>
+	<li>Usa la función <a href="http://php.net/manual/en/function.rawurlencode.php" target="_blank"><strong>rawurlencode()</strong></a> para escapar los string que se inserten en una URL. Esta función los acomoda para que cumplan con la sintaxis descrita en el <a title="RFC 3986 - Uniform Resource Identifier (URI): Generic Syntax" href="http://www.faqs.org/rfcs/rfc3986.html" target="_blank">RFC 3986</a>. Después, escapa la URL completa con <strong><a href="http://www.php.net/manual/en/function.htmlspecialchars.php" target="_blank">htmlspecialchars()</a></strong>.</li>
+	<li>No pasar datos escapados de sitios no seguros, por ejemplo, string que serán interpretados como Javascript, al contexto de ejecución de Javascript: <code class="prettyprint">setAttribute(“onclick”, “no-hagas-esto”).</code></li>
+	<li>Valida siempre las URLs construidas en sitios no seguros.</li>
+	<li><strong>Nunca validar URLs usando <a href="http://www.php.net/manual/en/function.filter-var.php" target="_blank">filter_var()</a></strong>. No funcionan y permiten pasar el filtro a URLs con código Javascript.</li>
+	<li><strong>No mezclar recursos http y https</strong> en una misma página.</li>
+	<li>Todo el código HTML que provenga de sitios no seguros se debe limpiar con <a href="http://htmlpurifier.org/" target="_blank"><strong>HTMLPurifier</strong></a> antes de mostrarlo.</li>
+	<li>También se puede usar <a href="http://htmlpurifier.org/" target="_blank"><strong>HTMLPurifier</strong></a> para otros lenguajes como <strong>BBCode o Markdown</strong>.</li>
+	<li>Intenta evitar el uso de CSS y Javascript en línea.</li>
+	<li>Utiliza el <em>Content-Type</em> adecuado al contenido que se transmite.</li>
+	<li>Las cookies que solo usa nuestro servidor hay que marcarlas como <a title="HTTP cookie" href="http://en.wikipedia.org/wiki/HTTP_cookie" target="_blank" rel="wikipedia">HttpOnly</a>.</li>
+</ul>
+<h3>HTMLPurifier</h3>
+<a href="http://htmlpurifier.org/" target="_blank"><strong>Esta librería es un gran aliado para la seguridad</strong></a> que nos permite analizar una entrada HTML, BBCode o Markdown y eliminar aquellas partes que contengan código malicioso. Además, nos asegura que el HTML de entrada cumple con el estándar declarado en el <em>doctype</em>. <a href="http://htmlpurifier.org/live/INSTALL" target="_blank">Instalarla</a> es sencillo (Requiere PHP 5 y los test se han realizado para versiones &gt;= 5.0.5) Puedes hacerlo de varias formas
+<ul>
+	<li><span style="line-height: 13px;"><a href="http://htmlpurifier.org/download" target="_blank"><strong>Descargar</strong></a> la librería.</span></li>
+	<li>Usar <strong>Pear</strong>:
+<pre class="prettyprint">pear channel-discover htmlpurifier.org
+pear install hp/HTMLPurifier</pre>
+</li>
+	<li>Clon <strong>Git</strong>: <code class="prettyprint">git clone git://repo.or.cz/htmlpurifier.git</code></li>
+</ul>
+Usarla es igualmente sencillo:
+<pre class="prettyprint">{% verbatim %}require_once '/path/to/HTMLPurifier.auto.php';
+
+$config = HTMLPurifier_Config::createDefault();
+$purifier = new HTMLPurifier($config);
+$clean_html = $purifier-&gt;purify($codigo_html_no_seguro);</pre>
+<strong>Para usuarios de Symfony2</strong> existe un <a title="HTMLPurifierBundle - Symfony2" href="https://github.com/Exercise/HTMLPurifierBundle" target="_blank"><strong>bundle</strong></a> desarrollado por <a href="http://twitter.com/jmikola" target="_blank"><strong>@jmikola</strong> </a>que incluye filtros para Twig:
+<pre class="prettyprint">{# Filters text's value through the "default" HTMLPurifier service #}
+{{ text|purify }}
+
+{# Filters text's value through the "custom" HTMLPurifier service #}
+{{ text|purify('custom') }}{% endverbatim %}</pre>
+&nbsp;
+
+Twitter: <strong><a href="http://twitter.com/padraicb" target="_blank">Pádraic Brady</a>.</strong>
+
+Reddit: <a href="http://www.reddit.com/r/PHP/comments/1cvea9/20_point_list_for_preventing_crosssite_scripting/" target="_blank"><strong>Comentarios del artículo</strong></a>.

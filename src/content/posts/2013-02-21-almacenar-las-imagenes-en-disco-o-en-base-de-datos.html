@@ -1,0 +1,37 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - mysql
+    - rendimiento
+permalink: /almacenar-las-imagenes-en-disco-o-en-base-de-datos
+no_html_extension: true
+layout: post
+title: '¿Almacenar las imágenes en disco o en base de datos?'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" />El título es una pregunta típica al diseñar/implementar proyectos en los que interviene un número considerado de imágenes, como servicios de hospedaje de fotos. La pregunta no tiene una respuesta taxativa porque depende de la naturaleza del proyecto y de lo que se quiera realizar con esas fotos. Si necesitamos retocar las fotos, almacenarlas en base de datos puede que no sea la opción más cómoda. En este post simplemente comentaré los pros y contras de ambas opciones y que cada uno elija la que mejor se adapte.
+
+El tamaño importa y <strong>almacenar imágenes en base de datos  hace que las tablas crezcan de tamaño rápidamente</strong> por lo que podríamos alcanzar algún tipo de límite configurado en el sistema operativo. Si almacenamos las imágenes en disco tenemos el problema de las búsquedas lentas. Para evitarlo podríamos aprovechar la jerarquía de directorios para organizar las imágenes y ganaríamos tiempo de búsqueda. <strong><em><a title="ReiserFS [eng] - Wikipedia" href="http://en.wikipedia.org/wiki/ReiserFS" target="_blank">Reiser FS </a></em>es un sistema de ficheros Linux que da muy buenos resultados en las búsquedas</strong>.
+
+&nbsp;
+
+<strong>Las imágenes almacenadas en disco se pueden obtener directamente por el <em>servidor web</em></strong>; Requiere de una operación de lectura en disco y de una operación de escritura en el flujo de respuesta hacia el cliente. A<strong>lmacenarlas en base de datos es una opción más lenta que necesita de un <em>script</em></strong> que recupere la imagen y se la entregue al servidor web. Ello supone una operación de lectura en la base de datos y una escritura para entregársela al <em>script</em>. Después, el script debe realizar una lectura de la imagen para enviarla a el cliente, lo que se traduce en una nueva operación de escritura, ahora sobre el flujo de respuesta.
+
+Dependiendo del tipo de aplicación que estemos desarrollado, puede que en el caso anterior no haya opción y tengamos que almacenarla en base de datos. Hablo de situaciones como en las que necesitamos controlar qué usuarios y cuantas veces acceden a una imagen, documento etc...
+
+<!--more-->
+
+&nbsp;
+
+<strong>Almacenar las imágenes en base de datos significa tener un repositorio de imágenes centralizado para todos las servidores</strong> o instancias. A no ser que tengas algún tipo de partición remota montada en todos los servidores, almacenar imágenes en disco es algo local al servidor y puede ser una situación no deseable cuando se dispone de múltiples servidores.
+
+&nbsp;
+
+Las imágenes se almacenan en MySql, por ejemplo, en un campo tipo <a title="Documentación MySql [eng]" href="http://dev.mysql.com/doc/refman/5.5/en/blob.html">Blob</a> de tamaño variable. <strong>Las búsquedas con el motor <a title="MyISAM - Wikipedia" href="http://es.wikipedia.org/wiki/MyISAM" target="_blank">MyISAM</a> en campos variables son más ineficiente que con campos de tamaño fijo</strong>.
+
+<strong>Almacenar las imágenes en base de datos supone un grado de acoplamiento alto entre las imágenes y el gestor de base de datos</strong>. Esto no ocurre con el almacenamiento en disco. Por otro lado, almacenar las imágenes en base de datos tienen la ventaja de tener el respaldo de las transacciones (en MySQL usar motor <a title="InnoDB - Wikipedia" href="http://es.wikipedia.org/wiki/InnoDB" target="_blank">InnoDB</a>) por lo que si para tu aplicación son importantes ciertos atributos asociados a la imagen, la imagen y los atributos se pueden almacenar en una operación atómica. Si se produce algún fallo, no se almacena la imagen. En disco, esto no sucede. Si se produce un error, la imagen quedará corrupta y los atributos no estarán sincronizados correctamente.
+
+Almacenar las imágenes en base de datos te da el beneficio de poder usar las herramientas de <em>backups</em> típicas de un gestor de base de datos. Almacenarlas en disco... también tiene sus herramientas de backup pero las de base de datos te pueden permitir una recuperación parcial.

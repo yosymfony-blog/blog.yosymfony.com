@@ -1,0 +1,55 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - 'open source'
+    - packagist
+permalink: /yosymfonytoml-parser-php-para-el-formato-toml-de-ficheros-de-configuracion
+no_html_extension: true
+layout: post
+title: 'yosymfony/toml: Parser PHP para el formato TOML de ficheros de configuración'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" />Tras varias semanas de desarrollo he publicado el <a href="https://github.com/yosymfony/Toml" target="_blank">primer componente</a> para PHP bajo el nombre de <a href="https://github.com/yosymfony" target="_blank">YoSymfony en Github</a>. Y es que la idea de este blog no es solo publicar noticias sino también aportar código a la comunidad PHP.
+
+<a href="https://github.com/yosymfony/Toml" target="_blank"><strong>yomsymfony/toml</strong></a> es un parser del formato de ficheros de configuración <a href="https://github.com/mojombo/toml" target="_blank"><strong>TOML creado por Tom Preston-Werner</strong></a>, cofundador de Github. La idea que subyace en este formato es la sencillez. Permitir crear ficheros de configuración intuitivos gracias a una semántica sencilla. En esencia, el fichero se forma por conjuntos de datos clave-valor que se pueden organizar en "namespaces". Un ejemplo:
+<pre class="prettyprint">[database] # namespace
+server = "192.168.1.1"
+ports = [ 8001, 8001, 8002 ]
+connection_max = 5000
+enabled = true
+
+[database.querys] # Namespace. Se usa el '.' para separar
+max_size_cache: 10 # expresado en MB</pre>
+<!--more-->
+
+TOML soporta un conjunto de datos simples como string, booleanos, enteros, flotantes, arrays y fechas con formato <a title="Wikipedia" href="http://es.wikipedia.org/wiki/ISO_8601" target="_blank">ISO8601</a>. Para facilitar la comprensión, en los arrays no se permiten mezclar varios tipos de datos.
+
+En cuanto a las claves, existe gran libertad para definirlas puesto que una clave comienza con el primer caracter distinto del espacio y finaliza con el último caracter distinto de espacio antes del igual:
+<pre class="prettyprint">~!@#$^&amp;*()_+-`1234567890[]\|/?&gt;&lt;.,;:' = 1 # esto es correcto</pre>
+<h3>Implementación</h3>
+El parser lo he implementado con la típica estructura de analizador léxico (<em>lexer.php</em>) - analizador sintáctico (<em>parser.php</em>). El primero se encarga de obtener tokens mientras que el segundo comprueba que estén en el orden correcto.
+
+La forma de usarlo es sencilla:
+<pre class="prettyprint">use Yosymfony\Toml\Toml;
+
+$array = Toml::Parse('example.toml'); // fichero
+
+print_r($array);
+
+$array = Toml::Parse('key = [1,2,3]'); // en línea
+
+print_r($array);</pre>
+Para incorporar <strong>yosymfony/toml</strong> a cualquier proyecto basta con incluir la dependencia en <code class="prettyprint">composer.json</code> y ejecutar <code class="prettyprint">composer update</code>:
+<pre class="prettyprint">"require": {
+    "yosymfony/toml": "dev-master"
+}</pre>
+&nbsp;
+
+Github: <strong><a href="https://github.com/yosymfony/Toml" target="_blank">yosymfony/toml</a>. </strong>Licencia: MIT.
+
+Packagist: <a title="Yosymfony TOML - Packagist" href="https://packagist.org/packages/yosymfony/toml" target="_blank"><strong>Información del paquete</strong></a>.
+
+TOML:  <a title="TOML 0.1.0" href="https://github.com/mojombo/toml/blob/master/versions/toml-v0.1.0.md" target="_blank"><strong>especificación v0.1.0</strong></a>.

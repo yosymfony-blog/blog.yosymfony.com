@@ -1,0 +1,30 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - Symfony
+tags:
+    - 'symfony 2.2'
+permalink: /disponible-symfony-2-2
+no_html_extension: true
+layout: post
+title: 'Disponible Symfony 2.2'
+
+---
+<img class="alignnone size-full wp-image-62" alt="symfony2-logo" src="/assets/wp-content/uploads/2013/01/symfony2-logo.png" width="255" height="73" />Tras 6 meses de duro trabajo (no hay más que ver las cifras del <a href="http://symfony.com/blog/symfony-2-2-0#numbers" target="_blank">post en el blog de Symfony</a>), la <a title="Disponible Symfony 2.2" href="http://symfony.com/blog/symfony-2-2-0" target="_blank"><strong>versión 2.2  de Symfony ya está disponible</strong></a>, versión cuyo objetivo es estabilizar las características esenciales del framework además servir de puente para la versión 2.3 que estará terminada a finales del mes de Mayo y que será de tipo LTS -<em>Long term support</em> - con soporte hasta 2014. Es importante destacar que a partir de la próxima 2.3, los lanzamientos se realizarán en base al tiempo (como lo hace <a href="https://wiki.ubuntu.com/ReleaseSchedule" target="_blank">Ubuntu</a> o <a href="https://wiki.mozilla.org/Features/Release_Tracking" target="_blank">Firefox</a>) y no en base a características.
+
+<!--more-->
+<h3>Mejoras de <strong>Symfony 2.2</strong>:</h3>
+En el <em><strong>FrameworkBundle</strong></em> se ha mejorado el <a href="http://symfony.com/blog/new-in-symfony-2-2-functional-tests-speed-up" target="_blank">rendimiento de las pruebas funcionales</a> deshabilitando el <em>profiler</em> por defecto. Ahora si lo necesitas en alguna prueba, simplemente lo habilitas. Este bundle también nos proporciona la posibilidad de <a href="http://symfony.com/blog/new-in-symfony-2-2-cache-support-for-static-pages" target="_blank">crear páginas estáticas sin tener que crear un controlador asociado</a> a cada una. A estas páginas se le puede configurar un mecanismo de caché.
+
+Para las páginas de comercio electrónico o simplemente aquellas que dispongan de algún tipo de sistema de pago para lo que sea, <a href="http://symfony.com/blog/new-in-symfony-2-2-payment-related-validators" target="_blank">Symfony 2.2 incluye un <strong>nuevo tipo de <em>validador</em> de números de tarjeta de crédito</strong></a> mediante el <a title="Algoritmo de Luhn - Wikipedia" href="http://es.wikipedia.org/wiki/Algoritmo_de_Luhn" target="_blank">algoritmo <em>Luhn</em></a>.
+
+El <em><strong>router</strong></em> ahora permite generar <a href="http://symfony.com/blog/new-in-symfony-2-2-new-url-generation-options" target="_blank">direcciones relativas</a> al esquema: <code class="prettyprint">//ejemplo.org/blog/la-pagina</code> y relativas al path: <code class="prettyprint">../ (path relativo de la URL)</code>. Ahora el <em>router</em> permite especificar los <a href="http://symfony.com/blog/new-in-symfony-2-2-url-host-support-in-the-routing" target="_blank">dominios y subdominios en los que actua una ruta</a>, característica muy demandada por los usuarios.
+
+El <strong><em>HttpKernel</em></strong> ahora dispone de un nuevo <a title="El nuevo sub-framework encargado de gestionar fragmentos de contenido" href="/el-nuevo-sub-framework-encargado-de-gestionar-fragmentos-de-contenido" target="_blank"><em>sub-framework</em> para los fragmentos de presentación</a>. Otra característica interesante es que ahora Symfony nos informa en la barra de depuración sobre las llamadas y las instancias que hacemos <a href="http://symfony.com/blog/new-in-symfony-2-2-logging-of-deprecated-calls" target="_blank">sobre funciones y clases marcadas como <em>deprecated</em> del framework</a>.
+
+El <strong><em>Finder</em></strong> mejora en <a href="https://gist.github.com/jfsimon/3230139" target="_blank">rendimiento</a> e incluye soporte de <em>globs</em> en funciones como <em><a href="http://symfony.com/blog/new-in-symfony-2-2-finder-improvements#glob-support-for-the-in-method" target="_blank">in()</a>,</em> que restringe las operaciones de búsqueda a los directorios pasados como argumento y <a href="http://symfony.com/blog/new-in-symfony-2-2-finder-improvements#filter-by-path" target="_blank">filtros por path</a>.
+
+Respecto a la<strong> <a href="http://symfony.com/blog/new-in-symfony-2-2-security-utilities" target="_blank">seguridad</a></strong> la versión 2.2 incluye un generador de números aleatorios seguros y un comparador de cadenas ideal para evitar <em><a href="http://en.wikipedia.org/wiki/Timing_attack">Timing attacks</a> </em>al comparar password.
+
+Por último, la parte de <strong>consola</strong> también recibe mejoras como el <a href="http://symfony.com/blog/new-in-symfony-2-2-autocomplete-on-the-command-line" target="_blank">autocompletar</a>, la <a href="http://symfony.com/blog/new-in-symfony-2-2-better-interaction-from-the-console#displaying-a-progress-bar-for-long-running-tasks" target="_blank">barra de progreso</a> o <a href="http://symfony.com/blog/new-in-symfony-2-2-better-interaction-from-the-console#hiding-passwords-given-from-the-cli" target="_blank">evitar que un password esté legible cuando lo introducimos</a>.

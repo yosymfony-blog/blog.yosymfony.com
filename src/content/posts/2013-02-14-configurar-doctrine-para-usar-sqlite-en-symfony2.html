@@ -1,0 +1,50 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - Symfony
+tags:
+    - doctrine
+    - sqlite
+    - symfony2
+permalink: /configurar-doctrine-para-usar-sqlite-en-symfony2
+no_html_extension: true
+layout: post
+title: 'Configurar Doctrine para usar SQLite en Symfony2'
+
+---
+<img class="alignnone size-full wp-image-136" alt="sqlite-logo" src="/assets/wp-content/uploads/2013/02/sqlite-logo.png" width="134" height="64" /><a href="http://www.sqlite.org/" target="_blank"><strong>SQLite</strong></a> es uno de los gestores de bases de datos más usados del mundo por su facilidad de uso y de incorporación en proyectos. <strong>Funciona almacenando toda la base de datos en un solo fichero</strong> y, a diferencia de otros gestores como MySQL u Oracle de tipo <em>cliente-servidor</em>, el proceso que gestiona los datos va embebido en la propia aplicación accediendo a la información mediante funciones en lugar de usar un protocolo que comunique al cliente con el servidor. SQLite <a title="Estándar ACID de base de datos - Wikipedia" href="http://es.wikipedia.org/wiki/ACID" target="_blank"><strong>cumple el estándar ACID</strong></a> por lo que implementa un mecanismo seguro para realizar <em>transacciones</em>.
+
+<strong>SQLite</strong> está más introducida en nuestras vidas de lo que creemos. El sistema operativo Android, el más usado del mundo en <em>smartphones</em>, lleva<a title="SQLite en Android [eng]" href="http://developer.android.com/reference/android/database/sqlite/package-summary.html" target="_blank"> incorporado SQLite</a>. <a title="Noticia: WebProfiler - Symfony.es" href="http://www.symfony.es/noticias/2010/09/01/symfony2-presenta-su-webprofiler/" target="_blank"><strong>Symfony2 usa SQLite en el <em>WebProfiler</em></strong> </a>para almacenar el historial de ejecución de nuestra aplicación en un fichero llamado <code class="prettyprint">profiler.db</code> en <code class="prettyprint">/cache</code>.
+
+<!--more-->
+<h3>Configurar Doctrine DBAL</h3>
+Symfony2 dispone de una detallada <a title="Configurar Doctrine DBAL [eng] - Symfony" href="http://symfony.com/doc/current/reference/configuration/doctrine.html#doctrine-dbal-configuration" target="_blank">documentación para configurar el gestor de base de datos</a> que va a emplear Doctrine. A continuación simplifico para mostrar como se configuraría el driver de SQLite:
+
+En primer lugar editamos el fichero <code class="prettyprint">app/config/config.yml</code>:
+<pre class="prettyprint"># Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   %database_driver%
+        host:     %database_host%
+        port:     %database_port%
+        dbname:   %database_name%
+        user:     %database_user%
+        password: %database_password%
+        path:     %database_path% // importará el directorio donde está nuestra base de datos SQLite
+        memory:   %database_memory%
+        charset:  UTF8</pre>
+Por último modificamos <code class="prettyprint">app/config/parameters.yml</code> que es el que contiene los parámetros de configuración usados por el anterior fichero:
+<pre class="prettyprint">    database_driver: pdo_sqlite
+    database_host:
+    database_port:
+    database_name:
+    database_memory: false // true si queremos que la base de datos se volátil
+    database_user: mi-usuario
+    database_password: mi-password
+    database_path: /directorio-mi-proyecto/app.db</pre>
+Si queremos que nuestra base de datos sea volátil, debemos poner a <em>true</em> el valor de la propiedad <em>database_memory</em> y dejar vacío el valor de <em>database_path</em>. Ten en cuenta que el valor de estos parámetros es mútuamente excluyente.
+
+&nbsp;
+
+Doctrine: <a title="Documentación pdo_sqlite [eng] - Doctrine" href="http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html" target="_blank"><strong>Driver pdo_sqlite</strong></a>

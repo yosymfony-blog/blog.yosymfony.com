@@ -1,0 +1,76 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - escalabilidad
+    - mysql
+    - rendimiento
+permalink: /php-escalabilidad-y-rendimiento
+no_html_extension: true
+layout: post
+title: 'PHP: Escalabilidad y rendimiento'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" />Escalabilidad y rendimiento son dos magnitudes que mantienen una estrecha relación y que, en general, determinan la capacidad de respuesta de una aplicación web. En este artículo describo varias opciones y configuraciones para que nuestras aplicaciones web respondan en tiempo y sean capaces de hacer frente a un crecimiento del número de accesos. No se trata de pensar en escalabilidad y rendimiento desde el minuto cero de nuestro proyecto; Es más bien, tener en mente los pasos posibles  y realizar una codificación que nos facilite estos pasos en el futuro.
+<h3>¿Qué es la escalabilidad y el rendimiento?</h3>
+El <strong>rendimiento determinan el tiempo de entrega de los resultados de una petición</strong>, es decir, como de rápido eres capaz de servir los datos. Imagina que el tiempo medio empleado en cada petición hacia tu web necesita 400 milisegundos. Una mejora de rendimiento sería bajar esa media a 300 milisegundos.
+
+La <strong>escalabilidad es la capacidad de tu aplicación web de crecer acorde con el crecimiento del número de usuarios</strong> que acceden a ella. Escalabilidad y rendimiento están relacionados. A medida que aumentas el rendimiento de una aplicación requiere menos recursos para escalar.
+
+<!--more-->
+
+&nbsp;
+<h3>Optimización de PHP</h3>
+PHP es un lenguaje interpretado que, en cada petición web, compila y convierte a <em>opcodes</em> nuestros script. Dicha transformación emplea un tiempo que puede llegar a ser considerable en situaciones de alto tráfico. Existen unas aplicaciones llamadas <em>opcodes cache</em> que se sitúan entre el servidor web y PHP y que almacenan los <em>opcodes</em> generados la primera vez que se realiza una petición de manera que las siguientes no es necesario realizar la compilación.
+
+Existen numerosas <em>opcodes cache</em> como <a href="http://www.iis.net/downloads/microsoft/wincache-extension" target="_blank">Wincache para IIS</a> o <a title="APC para PHP" href="http://pecl.php.net/package/APC" target="_blank">APC</a> que es una de las más usadas.
+
+No solo se deberían de cachear los opcodes de PHP. También es muy recomendable cachear el contenido HTML. Existen muchas páginas generadas dinámicamente cuyo contenido permanece invariable durante largos periodos de tiempo. Es una pérdida de recursos generarlas en cada petición por lo que se hace necesario almacenar el HTML resultante en disco y servidor directamente si no ha sufrido cambio alguno. Los <em>framework</em> más populares como <a title="Symfony framework" href="http://symfony.com/" target="_blank">Symfony</a> o <a title="Zend framework" href="http://framework.zend.com/" target="_blank">Zend</a> ya incluyen este tipo de mecanismos. Si no usas ningún <em>framework</em> que soporte caché de contenido, puedes crearte tu propio mecanismo de caché HTML:
+<pre class="prettyprint">// /var/www/app/utils/cache.php
+$timeout = 3600; // Una hora de duración
+$file = '/var/www/tmp/cache/' . md5($_SERVER['REQUEST_URI']);
+
+if (file_exists($file) &amp;&amp; (filemtime($file) + $timeout) &gt; time()) {
+    readfile($file); // Devuelve el contenido cacheado
+    exit();
+} else {
+    // Ejecutamos el contenido
+    ob_start();
+    register_shutdown_function(function () use ($file) {
+        $content = ob_get_flush();
+        file_put_contents($file, $content);
+    });
+}</pre>
+<h3>Balanceadores de carga</h3>
+El balanceador es una pieza importante cuando nuestra aplicación web alcanza un tráfico elevado. Nos va a permitir repartir el tráfico entrante entre varios servidores. PHP permite el escalado horizontal de forma sencilla, simplemente añadiendo más servidores. Balanceadores de carga hay de muchos tipos, software y hardware. Nuestra elección dependerá del presupuesto e incluso del tipo de hosting elegido.
+
+Los <strong>Balanceadores software</strong> son muy comunes pues no son más que una máquina corriendo en Linux, por ejemplo, a la que se le ha añadido software para gestionar la carga entre varias máquinas. Existe aplicaciones específicas, como <strong><a title="Balanceador de carga Perlbal" href="https://github.com/perlbal/Perlbal" target="_blank">Perlbal</a></strong>, para realizar las labores de un balanceador de carga pero la mayor parte de las ocasiones serán realizadas por servidores web como <a title="Servidor web Nginx" href="http://nginx.org/" target="_blank">Nginx</a>, <a title="Servidor web Apache" href="http://httpd.apache.org/" target="_blank">Apache</a> o <a href="http://www.squid-cache.org/" target="_blank">Squid</a>. Además de gestionar la carga de tráfico, todas estas aplicaciones suelen incorporar características adicionales como caché o compresión <em>GZIP</em> de los resultados.
+
+Dentro de los balanceadores software, podríamos incluir a aquellos disponibles en <strong>hosting cloud</strong> como <a href="http://aws.amazon.com/es/ec2/" target="_blank">Amazon EC2</a> que permite repartir la carga entre varias instancias.
+
+La otra gran categoría son los <strong>balanceadores hardware</strong>, máquinas con software y hardware diseñados específicamente para realizar esta tarea como <a href="http://www.citrix.com/products/netscaler-application-delivery-controller/overview.html" target="_blank">Citrix NetScaler</a> o <a href="http://www.f5.com/products/big-ip/" target="_blank">F5 Big-IP</a>. Además de su tarea principal, suelen actuar como barrera de seguridad o cortafuegos hacia nuestra red interna.
+
+Independientemente del tipo de balanceador de carga elegido, existe varios <strong><a title="Balance de carga - Wikipedia" href="http://es.wikipedia.org/wiki/Balance_de_carga" target="_blank">algoritmos para repartir la carga</a></strong>, desde los más simples, que reparte de forma aleatoria, hasta los que tienen en cuenta variables de estado de cada máquina para asignarles el tráfico.
+
+El uso de balanceadores de carga requiere tener en mente algunos consejos que pueden influir en el diseño del código de nuestra aplicación:
+<ul>
+	<li><span style="line-height: 13px;"><strong>Si usamos algún tipo de caché</strong>, como APC, debemos escribir nuestro código asumiendo que tendremos más de una caché, habrá tantas como nodos tengamos soportando carga.</span></li>
+	<li><strong>La información sobre sesiones</strong> o <em>cookies</em> <strong>se suelen almacenar en archivos</strong> por lo que es una mala opción si se emplean balanceadores de carga. Debemos buscar una alternativa, como almacenarlas en base de datos.</li>
+	<li>Al hilo del problema anterior, si almacenamos recursos como avatares o fotos subidas por los usuarios, debemos pensar en centralizar los recursos.</li>
+</ul>
+Aunque al principio nos baste solo con una máquina para soportar todo el tráfico, a medida que vamos codificando nuestro proyecto debemos hacerlo teniendo estas ideas en mente de forma que futuros cambios sean sencillos de hacer.
+<h3>MySql</h3>
+La base de datos es el siguiente <em>cuello de botella</em>. Aunque en el rendimiento de este factor no solo depende de la configuración de los servidores sino también del diseño de nuestras bases de datos: índices, tablas... etc. En este artículo me centraré en MySql por ser uno de los gestores de bases de datos más empleados en el mundo.
+<h4>Configuración maestro-esclavo</h4>
+<p style="text-align: left;">MySql permite activar la configuración maestro-esclavo en la que todos los cambios (<em>insert, update, delete</em>) realizados sobre el maestro, se propagan automáticamente al esclavo. Esto supone varios beneficios como repartir la carga ya que esclavos pueden ser varios. Ahora, todas las consultas que realice nuestra aplicación deben quedar separadas en aquellas que realizan solo consulta (<em>select</em>) de las que realizan modificación de datos (<em>insert, update o delete</em>). Todas las consultas que no implique alterar datos se deben dirigir hacia el esclavo mientras que las restantes se realizan sobre el maestro:<a href="/assets/wp-content/uploads/2013/02/mysql-maestro-esclavo.png"><img class=" wp-image-99 aligncenter" alt="mysql-maestro-esclavo" src="http://yosymfony.com/wp-content/uploads/2013/02/mysql-maestro-esclavo-300x226.png" width="240" height="181" /></a></p>
+Este tipo de configuración presenta un inconveniente y es que <strong>la propagación de los datos del maestro al esclavo necesita un tiempo</strong> que puede ir desde los milisegundos hasta segundos, dependiendo de la carga. Debes evitar realizar operaciones de modificación de datos e inmediatamente realizar una <em>select</em> porque puede que obtengas información errónea. Si es muy crucial obtener el dato real, podríamos realizar la select sobre el maestro pero en general, es una mala práctica.
+<h4>Múltiples esclavos</h4>
+Si llegamos a este punto hemos de felicitarnos pues nuestras aplicación ha triunfado. Ahora tenemos tantas peticiones que necesitamos añadir más esclavos para mejorar los tiempos de respuesta. En la arquitectura anterior, solo existía un esclavo al que realizar peticiones pero ahora, ¿a qué esclavo accedemos? Una solución sencilla consiste en asignar un esclavo a cada servidor web:
+<p style="text-align: center;"><a href="/assets/wp-content/uploads/2013/02/maestro-multiples-esclavos.png"><img class="size-medium wp-image-100 aligncenter" alt="maestro-multiples-esclavos" src="http://yosymfony.com/wp-content/uploads/2013/02/maestro-multiples-esclavos-179x300.png" width="179" height="300" /></a></p>
+Ahora, cada servidor web tiene configurado su esclavo.
+
+Existe una configuración adicional en la que en cada servidor web se instala un esclavo MySql. En general, es un configuración que no me gusta debido a que estás uniendo las necesidades del servidor web con las del servidor de base de datos. Una aplicación web puede hacer uso intesivo de datos y necesitar agregar cinco servidores MySql sin necesidad de aumentar los servidores web.
+<h4>Configuración maestro-esclavo en Symfony2</h4>
+Doctrine 2.1 soporta la configuración maestro-esclavo y desde <a title="Configuración Doctrine para maestro-esclavo en Symfony2" href="http://symfony.com/doc/master/reference/configuration/doctrine.html" target="_blank">Symfony2</a> se puede usar.

@@ -1,0 +1,96 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - 'php 5.5'
+permalink: /las-nuevas-caracteristicas-de-php-5-5
+no_html_extension: true
+layout: post
+title: 'Las nuevas características de PHP 5.5'
+
+---
+<img src="/assets/wp-content/uploads/2013/01/php-logo.png" alt="php-logo" width="123" height="74" class="alignnone size-full wp-image-51" />El pasado 21 de Febrero se lanzó <strong><a title="PHP 5.5.0 Alpha 5 - PHP" href="http://php.net/archive/2013.php#id2013-02-21-2" target="_blank">PHP 5.5.0 Alpha5</a></strong> y creo que es un buen momento para comentar algunas de las novedades que traerá esta nueva versión. Novedades que van desde crear <em>iteradores</em> de forma más sencilla hasta una nueva API para el <em>hashing</em> de password.
+
+<!--more-->
+<h3>Construir <em>iteradores</em> más sencillos</h3>
+Con el fin de crear iteradores de forma sencilla y rápida, nace el <a href="http://www.php.net/manual/en/language.generators.overview.php" target="_blank"><strong><em>Generators</em></strong></a>, que nos permite construir iteradores mediante bucles sin tener que escribir los métodos de la interfaz <em><a href="http://www.php.net/manual/en/class.iterator.php" target="_blank">Iterator</a></em>:
+<pre class="prettyprint">// Iterador del 0 al 9
+function rangeTo10()
+{
+    for(i=0; i&lt; 10; i++)
+    {
+        yield $i; //yield no return;
+    }
+}</pre>
+Usar el <em>iterador</em> es sencillo:
+<pre class="prettyprint"> foreach (rangeTo10() as $number) {
+    echo "$number ";
+}
+
+Salida: 0,1,2,3,4,5,6,7,8,9</pre>
+La parte interesante de los <em>Generators</em> es la sentencia <a title="PHP yield - PHP" href="http://www.php.net/manual/en/language.generators.syntax.php#language.generators.syntax.yield" target="_blank"><strong><em>yield</em></strong></a>, que a diferencia de <a title="PHP return - PHP" href="http://www.php.net/manual/en/functions.returning-values.php" target="_blank"><em>return</em></a>, no hace que termine el flujo de la función sino que queda 'congelado' y continua devolviendo resultados en la siguiente iteración. Los <em>Generators</em> además nos permiten iterar sobre los datos sin tenter que crear un array adicional en memoria. Por ejemplo, la función range(0, 1000000) crearía en memoria un array de un millón de elementos que ocuparían 100 MB en memoria. Por último, no olvides echarle un vistazo a la <a href="http://www.php.net/manual/en/language.generators.syntax.php" target="_blank"><strong>sintaxis de la sentencia <em>yield</em></strong></a>.
+<h3>Nueva Password Hashing API</h3>
+La nueva API gira entorno a la función <em><strong><a title="Función crypt - PHP" href="http://www.php.net/manual/en/function.crypt.php">crypt()</a></strong></em>, que obtiene el resumen de una cadena de entrada. La <a title="Password Hashing API - PHP" href="http://www.php.net/manual/en/book.password.php" target="_blank"><em>Password Hashing API</em></a> no es más que un envoltorio para gestionar los password mediante las siguientes funciones:
+<ul>
+	<li><strong><a href="http://www.php.net/manual/en/function.password-get-info.php" target="_blank">password_hash</a></strong>:<strong> </strong>Obtiene un <em>hash</em> del password de usuario. Permite indicar el <a href="http://www.php.net/manual/en/password.constants.php" target="_blank">algoritmo</a>.</li>
+	<li><a href="http://www.php.net/manual/en/function.password-get-info.php" target="_blank"><strong>password_get_info</strong></a>: Devuelve información sobre los parámetros usados para crear el <em>hash</em>.</li>
+	<li><a href="http://www.php.net/manual/en/function.password-needs-rehash.php" target="_blank"><strong>password_needs_rehash</strong></a>: Esta función es muy interesante porque devuelve un <em>booleano</em> que indica si el <em>hash</em> se ha generado con loas parámetros que le indicas a <em>password_needs_rehash</em> como argumento.</li>
+	<li><a href="http://www.php.net/manual/en/function.password-verify.php" target="_blank"><strong>password_verify</strong></a>: Esta as la función más interesante de todas porque permite comprobar si el password suministrado por un usuario es válido. Lógicamente, debemos tener previamente almacenado el <em>hash</em> del password.</li>
+</ul>
+Todos los <em>hash</em> empleados por la <em>Password Hashing API</em> deben crearse con <em>password_hash()</em>.
+<h3>Mejora de la función <em>empty()</em></h3>
+Ahora no solo acepta variables sino que también se pueden pasar funciones como argumento:
+
+<strong>PHP &lt; 5.5:</strong>
+<pre class="prettyprint">$nombre = " yosymfony "
+$nombreNormalizado = trim($nombre)
+
+if(!empty($nombreNormalizado))
+    echo 'hay nombre'</pre>
+<strong>PHP &gt;= 5.5:</strong>
+<pre class="prettyprint">$nombre = " yosymfony "
+
+if(!empty(trim($nombre))   // Ahora esto no produce error
+    echo 'hay nombre'</pre>
+<h3>Los bloques <em>try... catch</em> soportan <em>finally</em></h3>
+Por fin PHP se iguala a otros lenguajes e incorpora la sentencia <em>finally</em> para ejecutar código dentro de un bloque <em>try... catch</em> se produzca o no excepción.
+<pre class="prettyprint">try {
+    echo 'Código';
+} catch (Exception $e) {
+    echo 'Exceptión: '.$e-&gt;getMessage();
+} finally {
+    echo 'Bloque finally.';
+}</pre>
+<h3>Array y string dereferencing</h3>
+Para mí, esta es una de las características más importantes. Ya en la versión 5.4 se consiguió el dereferencing en arrays devueltos por funciones. Ahora ya es posible usarlo en literales:
+<pre class="prettyprint">function getArray() {
+    return array(1, 2, 3);
+}
+
+// Anterior a PHP 5.4
+$tmp = getArray();
+$item= $tmp[1];
+
+// de otra forma:
+list(, $item) = getArray();
+
+// En PHP 5.4
+$secondElement = getArray()[1];
+
+// En 5.5 también se puede:
+echo [1, 2, 3][0]; // Muestra 1
+
+// Con string también funciona:
+echo 'php'[0] // Muestra p</pre>
+<h3>Soporte de <em>List()</em> en bucles <em>foreach</em></h3>
+El constructor<a href="http://www.php.net/manual/en/function.list.php" target="_blank"><em><strong> list()</strong></em></a> permite asignar en una sola operación el valor de varias variables. En esta nueva versión de PHP es posible usarlo en bucles <em>foreach</em>:
+<pre class="prettyprint">$array = [
+    [1, 2],
+    [3, 4],
+];
+
+foreach ($array as list($a, $b)) {
+    echo "A: $a; B: $b\n";
+}</pre>

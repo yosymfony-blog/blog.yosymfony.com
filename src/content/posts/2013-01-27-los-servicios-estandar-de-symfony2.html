@@ -1,0 +1,67 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - Symfony
+tags:
+    - 'inyección de dependencias'
+    - symfony2
+permalink: /los-servicios-estandar-de-symfony2
+no_html_extension: true
+layout: post
+title: 'Los servicios estándar de Symfony2'
+
+---
+<a href="/assets/wp-content/uploads/2013/01/symfony2-logo.png"><img class="alignnone size-full wp-image-62" alt="symfony2-logo" src="/assets/wp-content/uploads/2013/01/symfony2-logo.png" width="255" height="73" /></a>El <a title="Contenedor de servicios de Symfony2 - eng" href="http://symfony.com/doc/current/book/service_container.html"><em>Service Container</em> o <em><strong>contenedor de servicios</strong></em></a> es una pieza muy importante de Symfony2 que permite instanciar y organizar algunos objetos de nuestra aplicación en un lugar centralizado. Gracias al <a title="Inyector de dependencias de Symfony2" href="http://github.com/symfony/DependencyInjection" target="_blank"><em>Inyector de dependencias</em></a> es capaz de construir los objetos entregándoles, en el momento de la construcción, las clases de las que depende. Como resultado obtenemos una mayor reutilización de nuestro código y un mayor nivel de desacoplamiento entre nuestras clases.
+<h3>¿Qué es un servicio?</h3>
+Un servicio en Symfony2 no es más que una instancia de una clase, accesible de forma global, que se encarga de realizar una tarea determinada. Cuando en algún controlador de nuestra aplicación necesitamos enviar un correo, obtenemos el servicio <em>mailer</em> que provee todo lo necesario para administrar el envío de emails:
+<pre class="prettyprint">class ControladorDeTuAplicacion extends Controller {
+   public function holaAction() {
+      $this-&gt;get('mailer'); // Obtiene el servicio de envío de email
+   }
+}</pre>
+<!--more-->
+
+Nuestra aplicación puede extender el <em>Service Container</em> con servicios propios. La forma más sencilla, si usas el formato <em>YML</em>, es crear una clase, que contendrá la lógica de nuestro servicio, y editar el fichero <em>services.yml</em> dentro de <em>/Resources/config</em> de nuestro bundle para darle un nombre al servicio e indicar las dependencias que presenta:
+<pre class="prettyprint">namespace AcmeBundle\MiGestorDeCorreo;
+
+//
+// Gestor de envío de correos de mi proyecto
+//
+class MiGestorDeCorreo
+{
+    private $mailer;
+
+    public function __construct($mailer)
+    {
+        $this-&gt;mailer = $mailer; // Gestor de correo de Symfony2
+    }
+
+    public function eviarCorreoDeBienvenida()
+    {
+        // ...
+    }
+}</pre>
+Ahora solo queda registrar la clase en el fichero services.yml de alguno de nuestros bundles, normalmente, en aquel con el que presenta más afinidad:
+<pre class="prettyprint">services:
+    acme.gestorCorreo:
+        class: AcmeBundle\MiGestorDeCorreo # Namespace completo a nuestra clase
+        arguments: [@mailer] # dependencia1, dependencia2,... dependenciaN</pre>
+Como argumentos puedes pasar otros servicios (se emplea la '@'), constantes, y variables declaradas en el <em>services.yml</em>.
+
+Ahora, gracias al nombre que hemos dado al servicio podemos obtener una instancia de nuestro gestor de correo desde cualquier controlador de forma sencilla:
+
+<code class="prettyprint">$this-&gt;get('acme.gestorCorreo')</code>
+<h3>Lista de servicios estándar</h3>
+Existe una extensa lista de servicios que forma parte Symfony2  y que se pueden obtener mediante la consola de Symfony:
+
+<code class="prettyprint">$ php app/console container:debug</code>
+
+De ellos, los más usados suelen ser los siguientes:
+<ul>
+	<li><span style="line-height: 13px;"><strong>request</strong>: Representa la petición en curso.</span></li>
+	<li><strong>mailer</strong>: Utilidades relacionadas con el envío de correos. Es un <em>wrapper</em> del componente<em><a href="http://swiftmailer.org/" target="_blank"> Swift Mailer</a>.</em></li>
+	<li><strong>doctrine</strong>: Doctrine es el <em><a title="¿Qué es un ORM? - Wikipedia" href="http://es.wikipedia.org/wiki/Mapeo_objeto-relacional" target="_blank">ORM</a></em> por defecto de Symfony2 y se encarga de la persistencia de datos. Mediante este servicio se puede obtener en <em>Entity Manager</em>.</li>
+	<li><strong>twig</strong>: Motor de plantillas</li>
+	<li><strong>security.context</strong>: Información de la sesión de usuario: token, roles, autenticación...</li>
+</ul>

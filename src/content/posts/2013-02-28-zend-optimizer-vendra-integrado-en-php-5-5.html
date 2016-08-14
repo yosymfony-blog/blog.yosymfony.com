@@ -1,0 +1,27 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - optimizer+
+    - 'php 5.5'
+permalink: /zend-optimizer-vendra-integrado-en-php-5-5
+no_html_extension: true
+layout: post
+title: 'Zend Optimizer+ vendrá integrado en PHP 5.5'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" />Es muy probable que veamos el <a title="Zend OptimizerPlus Source Code - Github" href="https://github.com/zend-dev/ZendOptimizerPlus/" target="_blank"><strong><em>Optimizer+</em> de Zend</strong></a> <strong>en la próxima versión de PHP</strong> según los resultados temporales de la votación al <strong><a title="RFC OptimizerPlus [eng] - PHP" href="https://wiki.php.net/rfc/optimizerplus" target="_blank">RFC</a></strong> que describe la propuesta. En la votación hay varias opciones y por el momento, la <em>"Integrate into 5.5, even if minor delay required"</em> es la más votada. Si finaliza la votación de este modo, PHP 5.5 vendrá con <em>Zend Optimizer+</em> aunque tenga un pequeño retraso. La siguiente opción más votada por la comunidad es integrar el componente en PHP 5.5 solo la fecha de lanzamiento de la versión no sufre retrasos. En caso contrario dejarlo para la 5.6  y ya estaríamos hablando de mediados de 2014.
+
+<!--more-->
+
+<em><strong>Zend Optimizer+</strong></em> es un <a title="PHP Opcodes cache o PHP accelerator - Wikipedia" href="http://es.wikipedia.org/wiki/PHP_accelerator" target="_blank"><em>opcodes cache</em></a>, una <strong>aplicación que aumenta el rendimiento del los script PHP evitando compilaciones innecesarias a código intermedio</strong> para ser ejecutado por el intérprete del lenguaje. Hasta hace menos de un mes, el código fuente de <em>Optimizer+</em> no era software libre aunque se podía usar libremente en proyectos, pero ahora, como parte de este RFC, Zend lo ha liberado bajo la <a title="Licencia PHP - Wikipedia" href="http://es.wikipedia.org/wiki/Licencia_PHP" target="_blank"><strong>licencia PHP</strong></a> para no tener problemas de integración con otros componentes del lenguaje.
+
+Además de <em>Zend Optimizer</em>, existen otros <i>Opcodes Cache </i>como <em><a href="http://php.net/manual/es/book.apc.php" target="_blank"><strong>APC</strong></a></em> o <em><strong>xCache</strong></em>. <em>APC</em> es el más conocido y sobre él se ha realizado el <strong><a title="Optimizer+ vs APC" href="http://bit.ly/Y6CZd1" target="_blank"><em>benchmarks Optimizer+</em> vs <em>APC</em> </a> </strong>que nos deja interesantes resultados. En términos generales, <em>Optimizer+</em> se comporta mucho mejor que <em>APC</em> en número de peticiones/segundo donde obtiene una ganancia de entre un 5 y un 20%.
+
+La gran ventaja de <em>Zend Optimizer+</em> es el rendimiento pero <em>APC</em> también presenta características que no incluye <em>Optimizer+</em> como la caché de datos o la reutilización de partes de memoria en desuso; <em>Zend Opetimizer+</em> funciona de otra manera ya que no reclama el espacio en desuso y se reinicia cuando el total de memoria no usada sobrepasa un nivel configurable.
+
+&nbsp;
+
+Vota el <a href="https://wiki.php.net/rfc/optimizerplus" target="_blank"><strong>RFC</strong></a>.

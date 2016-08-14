@@ -1,0 +1,117 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - closures
+    - 'funciones anónimas'
+    - traits
+permalink: /php-invocar-funciones-anonimas-desde-una-variable
+no_html_extension: true
+layout: post
+title: 'PHP: Invocar funciones anónimas desde una variable'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" /><strong>Las funciones anónimas o <em>closures</em> son funciones que permite crear <em><a title="Función callback - Wikipedia" href="http://es.wikipedia.org/wiki/Callback_(inform%C3%A1tica)" target="_blank">callback</a></em></strong>,  es decir, funciones que se pasa como argumento a otra y se ejecutan dentro de esta última. Se denominan funciones anónimas porque no tienen un nombre por el que hacerles referencia salvo, claro está, que se asignen a un variable.
+<pre class="prettyprint">echo <a href="http://php.net/manual/es/function.preg-replace-callback.php" target="_blank">preg_replace_callback</a>('/hola/', function ($coincidencia) {
+    return strtoupper($coincidencia[0]);
+}, 'hola-mundo');
+
+// Como resultado se obtiene HOLA-mundo</pre>
+<!--more-->
+
+En el ejemplo anterior, a la función <a href="http://php.net/manual/es/function.preg-replace-callback.php"><em>preg_replace_callback()</em></a> se le pasa como segundo argumento una función anónima que es invocada tras procesar la expresión regular y a la que como argumento le llegan un array con todas las coincidencias. <strong>Este tipo de funciones están disponibles desde <a href="http://www.php.net/manual/en/class.closure.php" target="_blank">PHP &gt;= 5.3.0</a></strong>. Para crear funciones y pasarlas como argumento en versiones de PHP &gt;= 4.0.1, se debe emplear <a href="http://www.php.net/manual/es/function.create-function.php" target="_blank"><em>create_function()</em></a>:
+<pre class="prettyprint">echo <a href="http://php.net/manual/es/function.preg-replace-callback.php" target="_blank">preg_replace_callback</a>('/hola/', create_function ('$coincidencia', 
+    'return strtoupper($coincidencia[0]);'), 'hola-mundo');
+
+// Como resultado se obtiene HOLA-mundo</pre>
+Las funciones anónimas nos permite generar un código más limpio y ordenado aunque todo esto, al final, depende del programador por lo que conviene usar cada herramienta en el momento adecuado.
+<h3>Invocar funciones anónimas desde una variable de clase</h3>
+Si ejecutamos el siguiente código obtendremos un error: <code class="prettyprint">Fatal error:  Call to undefined method MyClass::lambda()</code>:
+<pre class="prettyprint">class MiClase {
+  var $miFuncion;
+  function __construct() {
+    $this-&gt;miFuncion = function() {echo 'Yo! Symfony';}; // Declaración correcta
+  }
+}
+
+$obj = new MiClase();
+$obj-&gt;miFuncion();</pre>
+La declaración de la función anónima es correcta, el problema viene en la ejecución debido a que los <strong>métodos y las propiedades de una clase se encuentran en espacios distintos</strong> lo que permite tener nombres de propiedades y métodos iguales sin que surja ningún problema:
+<pre class="prettyprint">$obj-&gt;miFuncion; // Se accede como propiedad
+$obj-&gt;miFuncion(); // Se accede como función</pre>
+Disponemos de <strong>varias alternativas</strong> para invocar la función anónima asignada a una propiedad de clase:
+<h4>Asignar nuestra función a una variable local</h4>
+<pre class="prettyprint">class MiClase {
+  public $miFuncion;
+  function __construct() {
+    $this-&gt;miFuncion = function() {echo 'Yo! Symfony';}; // Declaración correcta
+  }
+}
+
+$obj = new MiClase();
+$miFuncion = $obj-&gt;miFuncion;
+$miFuncion();</pre>
+<h4>Método mágico __invoke():</h4>
+El método <a href="http://www.php.net/manual/en/language.oop5.magic.php#object.invoke" target="_blank"><em><strong>__invoke()</strong> </em></a>es un <em>magic method</em> de PHP que se emplea al llamar a métodos como funciones. Las funciones anónimas son instancias de <a href="http://www.php.net/Closure" target="_blank"><em><strong>Closure</strong></em></a> y este implementa el método <em>__invoke() </em>por lo que podemos usarlo directamente:
+<pre class="prettyprint">class MiClase {
+  public $miFuncion;
+  function __construct() {
+    $this-&gt;miFuncion = function() {echo 'Yo! Symfony';}; // Declaración correcta
+  }
+}
+
+$obj = new MiClase();
+$obj-&gt;miFuncion-&gt;__invoke();</pre>
+<h4>Mediante call_user_func()</h4>
+El método <a href="http://www.php.net/manual/en/function.call-user-func.php" target="_blank"><em>call_user_func()</em></a> está disponible desde PHP &gt;= 4.0 y permite invocar la función pasada como argumento:
+<pre class="prettyprint">class MiClase {
+  public $miFuncion;
+  function __construct() {
+    $this-&gt;miFuncion = function() {echo 'Yo! Symfony';}; // Declaración correcta
+  }
+}
+
+$obj = new MiClase();
+call_user_func($obj-&gt;miFuncion);</pre>
+Si añadimos un segundo parámetro a <em>call_user_func</em> se pasará como argumento a <em>miFuncion</em> aunque en este caso no es necesario. Emplearemos <em><a href="http://www.php.net/manual/en/function.call-user-func-array.php" target="_blank">call_user_func_array()</a></em> en lugar de la anterior si deseamos pasar más de un parámetro como argumento. Ten en cuenta que siempre se pasan por referencia.
+<h4>Mediante la método mágico __call()</h4>
+Mediante el siguiente patrón logramos poder llamar directamente a nuestra función anónima:
+<pre class="prettyprint">class MiClase {
+  private $miFuncion;
+  function __construct() {
+    $this-&gt;miFuncion = function() {echo 'Yo! Symfony';}; // Declaración correcta
+  }
+
+  public function __call($nombre, $argumentos)
+  {
+    return call_user_func_array($this-&gt;$nombre, $argumentos);
+  }
+}
+
+$obj = new MiClase();
+$obj-&gt;miFuncion(); // Ahora si podemos llamar directamente</pre>
+<h4>Mediante Traits</h4>
+Los <em><strong><a href="http://php.net/manual/es/language.oop5.traits.php" target="_blank">Traits</a></strong>,</em> disponibles desde PHP &gt;= 5.4, <strong>nos van a permitir encapsular el  <em>__call()</em> anterior y reutilizarlo en cualquier clase</strong>:
+<pre class="prettyprint">trait FuncionAnonima
+{
+  public function __call($nombre, $argumentos)
+  {
+    return call_user_func_array($this-&gt;$nombre, $argumentos);
+  }
+}
+
+class MiClase {
+  use FuncionAnonima;
+  private $miFuncion;
+  function __construct() {
+    $this-&gt;miFuncion = function() {echo 'Yo! Symfony';}; // Declaración correcta
+  }
+}
+
+$obj = new MiClase();
+$obj-&gt;miFuncion(); // Ahora si podemos llamar directamente</pre>
+&nbsp;
+
+PHP: <strong><a title="Operador this en closures - PHP" href="http://www.php.net/manual/en/functions.anonymous.php#97906" target="_blank">Uso del operador</a><a title="Operador this en closures - PHP" href="http://www.php.net/manual/en/functions.anonymous.php#97906" target="_blank"> <em>$this</em> en closures (PHP &gt;=</a><a title="Operador this en closures - PHP" href="http://www.php.net/manual/en/functions.anonymous.php#97906" target="_blank"> 5.4.0)</a></strong>.

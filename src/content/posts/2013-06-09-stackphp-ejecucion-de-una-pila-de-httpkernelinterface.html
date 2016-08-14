@@ -1,0 +1,51 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+    - Symfony
+tags:
+    - httpKernelInterface
+    - silex
+    - stackphp
+    - symfony2
+permalink: /stackphp-ejecucion-de-una-pila-de-httpkernelinterface
+no_html_extension: true
+layout: post
+title: 'StackPHP: Ejecución de una pila de HttpKernelInterface'
+
+---
+<img class="alignnone size-full wp-image-62" alt="symfony2-logo" src="/assets/wp-content/uploads/2013/01/symfony2-logo.png" width="255" height="73" />Hace unas semanas leía un artículo muy interesante titulado <strong>"<a href="https://igor.io/2013/02/02/http-kernel-middlewares.html" target="_blank"><em>HttpKernel middlewares</em></a>"</strong> de  <a title="Twitter de Igor Wiedler" href="http://twitter.com/igorwesome" target="_blank">Igor Wiedler</a> acerca de la importancia de <a title="HttpKernelInterface de Symfony2" href="https://github.com/symfony/HttpKernel/blob/master/HttpKernelInterface.php" target="_blank">HttpKernelInterface</a> y de como se puede crear una pila de HttpKernel que se ejecuten en cadena. Por si esta interfaz no te suena, pertenece al componente <a href="https://github.com/symfony/HttpKernel" target="_blank">HttpKernel de Symfony2</a> y es la parte central del framework. Digamos que es la interfaz que cumplen las clases que desean gestionar peticiones y que usan componentes de Symfony2.
+
+Para entender la importancia de esta interfaz, hay que remontarse a la especificación <a href="http://rack.rubyforge.org/doc/SPEC.html" target="_blank"><strong>Rack</strong></a> de Ruby que define la forma en la que un servidor web puede interactuar con una aplicación Ruby. Mediante Rack, cualquier aplicación que cumpla la interfaz puede interactuar con un servidor web. En PHP, la interfaz se llama SAPI -<em>Server Application Programming Interface</em>- y dispone de varias en función del entorno y del servidor web: CLI, CGI-FCGI, ISAPI (IIS de Microsoft) etc... Puedes obtener el nombre de la interfaz SAPI con <a href="http://php.net/manual/es/function.php-sapi-name.php" target="_blank"><em>php_sapi_name()</em></a>.
+
+<!--more-->
+
+A diferencia de Rack, la interfaz de PHP es demasiado plana: $_GET, $_POST y $_SERVER. Sería más fácil e intuitivo trabajar con objetos y de eso se encarga HttpKernelInterface. Esta interfaz entrega un objeto de tipo <a title="Request de HttpFoundation - Symfony2" href="https://github.com/symfony/HttpFoundation/blob/master/Request.php" target="_blank">Request</a>, que es una representación de los datos más adecuada para trabajar y con muchas facilidades. Como salida, espera un objeto tipo <a title="Response HttpFoundation - Symfony2" href="https://github.com/symfony/HttpFoundation/blob/master/Response.php" target="_blank">Response</a> que representaría la respuesta HTTP.
+
+La desventaja HttpKernelInterface con respecto a Rack es que no existe una especificación. HttpKernelInterface pertenece a Symfony2 y no forma parte del core de PHP, pero los principales componentes de este framework se están convirtiendo en un estádar <em>de facto</em> para construir otros framework como Laravel, Drupal o Magento.
+<h3>StackPHP</h3>
+La idea que propone Igor Wiedler es la ejecución en cadena de componentes que cumplen esta interfaz, al estilo de como funcionaban los <a href="http://symfony.com/legacy/doc/more-with-symfony/1_4/en/10-Symfony-Internals#chapter_10_the_filter_chain" target="_blank">filtros de Symfony 1.x</a>. Se trata de que en cada etapa, se pueden realizar acciones durante la ida y la vuelta de la ejecución. Acciones como logger, debug, autenticación, uso de https etc... La ejecución de este tipo de stack en framework como Silex o Laravel es de gran utilidad y para facilitar la construcción de estas pilas existe un proyecto llamado <strong><a href="http://stackphp.com/" target="_blank">stackphp</a> que simplifica enormemente la creación de estas pilas:</strong>
+<pre class="prettyprint">// Ejemplo con Silex:
+$app = new Silex\Application();
+
+$stack = (new Stack\Builder()) -&gt;push('Stack\Session') -&gt;push('Symfony\Component\HttpKernel\HttpCache\HttpCache', new Store(__DIR__.'/cache')); $app = $stack-&gt;resolve($app);</pre>
+Además del builder, en Stackphp han desarrollado varios componentes <a href="https://github.com/stackphp/session" target="_blank">Stack/Session</a>, <a href="https://github.com/stackphp/url-map" target="_blank">Stack/UrlMap</a> y <a href="https://github.com/stackphp/oauth" target="_blank">Stack/OAuth</a>.
+<h3>Un ejemplo</h3>
+En Github <a href="http://twitter.com/acleon" target="_blank">@acleon</a> ha publicado un<a href="https://github.com/herebeducks/StackGeoIp" target="_blank"> ejemplo que permite añadir al stack <strong>datos de geolocalización de la IP</strong></a>. Los datos son insertados en las cabeceras de peticiones. Usarlo es sencillo y solo requiere incluirlo en el StackPHP:
+<pre class="prettyprint">use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+require __DIR__ . '/vendor/autoload.php';
+
+$app = new Silex\Application();
+
+...
+$stack = (new Stack\Builder())
+    -&gt;push('Ducks\Stack\GeoIp');
+
+...</pre>
+&nbsp;
+
+Ruby: <a href="http://rack.rubyforge.org/doc/Rack/Builder.html" target="_blank"><strong>Rack Builder</strong></a>.

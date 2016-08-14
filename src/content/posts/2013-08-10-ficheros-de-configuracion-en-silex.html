@@ -1,0 +1,86 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+    - Symfony
+tags:
+    - silex
+permalink: /ficheros-de-configuracion-en-silex
+no_html_extension: true
+layout: post
+title: 'Ficheros de configuración en Silex'
+
+---
+<img class="alignnone size-full wp-image-85" alt="silex-logo" src="/assets/wp-content/uploads/2013/01/silex-logo.png" width="92" height="88" /><a href="http://silex.sensiolabs.org" target="_blank"><strong>Silex</strong></a> no incorpora de serie ningún mecanismo para cargar ficheros de configuración. Existen varios <a href="https://github.com/fabpot/Silex/wiki/Third-Party-ServiceProviders#config" target="_blank">ServiceProviders</a> pero ninguno se adaptaba a mis necesidades por lo que <a title="Silex Config ServiceProvider" href="https://github.com/yosymfony/ConfigServiceProvider" target="_blank"><strong>he escrito un proveedor de servicio</strong></a> basado en <a href="https://github.com/symfony/Config" target="_blank">Symfony Config component</a> que aprovecha la mayoría de sus características a excepción de la caché que, por el momento, no tengo nada pensado.
+<h3>ConfigServiceProvider</h3>
+ConfigServiceProvider permite cargar de serie configuraciones con formato Yaml y Toml, y es posible escribir cargadores para otros formatos, como Json, fácilmente. El resultado de interpretar cada fichero de configuración es almacenado en un repositorio y los repositorios se pueden mezclar, para dar como resultado otro repositorio, y validar su esquema para asegurarnos que las claves cumplen con la estructura y el dominio establecido.
+
+<!--more-->
+
+Usar el ConfigServiceProvider es sencillo. Como siempre, todo comienza con escribir la dependencia en <strong>composer.json</strong> de nuestro proyecto:
+<pre class="prettyprint">"require": {
+    "yosymfony/config-serviceprovider": "1.0.*@dev"
+}</pre>
+Tras actualizar las dependencias con <code class="prettyprint">composer update</code> hay que registrar el ServiceProvider:
+<pre class="prettyprint">$app-&gt;register(new ConfigServiceProvider());</pre>
+El registro crea un nueva entrada en el DIC  -<em>Contenedor de Servicios</em>- en la que está disponible el componente. Para cargar un fichero de configuración se emplea el método <code class="prettyprint">load</code>:
+<pre class="prettyprint">$repository = $app['configuration']-&gt;load('/var/www/config/user.yml');</pre>
+Si tienes localizados los directorios donde se van a encontrar todas las configuraciones, puedes pasarlos en el constructor del ServiceProvider y la referencia a los ficheros de configuración será más sencilla:
+<pre class="prettyprint">$app-&gt;register(new ConfigServiceProvider(array(
+    __dir__.'/config2',
+    '/var/www/config'
+)));
+
+$repository = $app['configuration']-&gt;load('user.yml');</pre>
+Hay que tener en cuenta que si existe más de un fichero user.yml, solo devolverá el primero.
+
+El acceso/modificación de los datos en el repositorio se puede realizar usando la interfaz típica de arrays o mediante los métodos set y get:
+
+<pre class="prettyprint">$repository->get('name', 'noname'); // Si 'name' no existe devuelve 'noname'
+$repository['name']; // Obtiene el valor asociado a la clave 'name'
+
+$repository->set('user, 'username'); // Equivale a 
+$repository['user'] = 'username';
+</pre>
+<h3>Validar el esquema de un fichero de configuración</h3>
+Para validar que la estructura del fichero de configuración y el dominio de sus valores es el adecuado, debemos <a href="http://symfony.com/doc/current/components/config/definition.html" target="_blank">escribir una clase que usa TreeBuilder de Symfony Config component</a>:
+<pre class="prettyprint">use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+
+class MyConfigDefinitions implements ConfigurationInterface
+{
+    public function getConfigTreeBuilder()
+    {
+        $treeBuilder = new TreeBuilder();
+        $rootNode = $treeBuilder-&gt;root(0);
+
+        $rootNode-&gt;children()
+            -&gt;integerNode('port')
+                -&gt;end()
+            -&gt;scalarNode('server')
+                -&gt;end()
+        -&gt;end();
+
+        return $treeBuilder;
+    }
+}</pre>
+La clase anterior, permite validar la siguiente configuración:
+<pre class="prettyprint"># Yaml file
+port: 25
+server: "mail.yourname.com"</pre>
+o esta otra:
+<pre class="prettyprint"># Toml file
+port = 25
+server = "mail.yourname.com"</pre>
+La validación se realiza desde el repositorio <code class="prettyprint">$repository-&gt;validateWith(new MyConfigDefinitions());</code>
+<h3>Mezclar repositorios</h3>
+Mezclar configuraciones es una tarea habitual cuando existe una jerarquía de las mismas. Dos repositorios, A y B se pueden mezclar y conseguir otro C en el que las claves de A tienen preferencia, en caso de conflicto, sobre las de B y las claves de B que no estén en A estarán añadidas en C:
+<pre class="prettyprint">$resultC = $repositoryA-&gt;mergeWith($repositoryB);</pre>
+&nbsp;
+
+Silex: <strong><a href="https://github.com/fabpot/Silex/wiki/Third-Party-ServiceProviders" target="_blank">Third Party ServiceProviders</a></strong>
+
+Packagist: <a href="https://packagist.org/packages/yosymfony/config-serviceprovider" target="_blank"><strong>config-serviceprovider</strong></a>
+
+Gist: <a href="https://gist.github.com/yosymfony/5936108" target="_blank"><strong>Simple skeleton for Silex application</strong></a>

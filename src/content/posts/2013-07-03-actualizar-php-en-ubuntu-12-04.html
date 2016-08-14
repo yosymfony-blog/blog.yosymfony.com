@@ -1,0 +1,33 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - 'php 5.4'
+    - 'php 5.5'
+permalink: /actualizar-php-en-ubuntu-12-04
+no_html_extension: true
+layout: post
+title: 'Actualizar PHP en Ubuntu 12.04'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" />La versión 12.04 es una de las más utilizadas gracias a que es una LTS -versión de largo mantenimiento-. Los repositorios configurados por defecto siguen usando la rama de  <a href="/fin-de-php-5-3-x">5.3.x  de PHP que ha quedado obsoleta</a>. Lo recomendado en este momento es usar, como mínimo, la rama 5.4 lo que significa que o bien compilamos la versión o actualizamos la lista de repositorios con nuevos orígenes que contienen los paquetes actualizados. Esta última opción es la que tomé ayer para actualizar el servidor de desarrollo. Como origen tomé el repositorio de <a href="https://launchpad.net/~ondrej/+archive/php5" target="_blank"><strong>Ondřej Surý</strong></a>, uno de los más recomendados:
+
+<!--more-->
+
+Añadimos el nuevo origen:
+<code class="prettyprint">sudo add-apt-repository ppa:ondrej/php5</code>
+
+Instalamos PHP 5.4:
+<code class="prettyprint">sudo apt-get install php5</code>
+
+Pude que tras la instalación obtentas algún mensaje del tipo "... Unable to load dynamic library ...". Los mensajes se deben a que intenta cargar algún módulo que no se encuentra en la ruta indicada por el php.ini. Lo recomendado es revisarlo y ver que otros ficheros .ini carga mediante <em>phpinfo()</em>. En mi caso, tuve que cambiar la ruta de <em>xdebug.so</em>.
+<h3>Actualizar a PHP 5.5</h3>
+La versión más reciente (es del 20 de Junio) es la 5.5.0. Para actualizar podemos seguir el tutorial de <a href="http://www.brandonsavage.net/compiling-php-5-5-from-scratch/" target="_blank">Brandon Savage: "Compiling PHP 5.5 from the scratch"</a> si queremos compilarla o añadir un nuevo origen de <a href="https://launchpad.net/~ondrej/+archive/php5-experimental/+packages" target="_blank">Ondřej Surý</a> para la esta versión:
+
+Añadimos el nuevo origen:
+<code class="prettyprint">sudo add-apt-repository ppa:ondrej/php5-experimental</code>
+
+Instalamos:
+<code class="prettyprint">sudo apt-get install php5</code>

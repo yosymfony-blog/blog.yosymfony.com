@@ -1,0 +1,28 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - Symfony
+tags:
+    - 'symfony 2.2.0'
+permalink: /symfony-2-2-0-rc2-disponible
+no_html_extension: true
+layout: post
+title: 'Symfony 2.2.0 RC2 disponible'
+
+---
+<img class=" wp-image-62 alignleft" alt="symfony2-logo" src="/assets/wp-content/uploads/2013/01/symfony2-logo.png" width="204" height="58" />Desde hoy está disponible la <a title="Symfony 2.2.0 RC2 [eng] - Blog de Symfony" href="http://symfony.com/blog/symfony-2-2-0-rc2-released" target="_blank"><strong>segunda versión candidata a Symfony 2.2.0</strong></a> y este mes tendremos versión final!. Seguramente te estés preguntando ¿qué fue de la RC1?. Pues simplemente, <a title="Symfony 2.2.0 RC1" href="https://github.com/symfony/symfony/tree/v2.2.0-RC1" target="_blank">se sacó la semana pasada</a> pero no se hizo ningún comunicado en el blog oficial porque algunos componentes no estaban con un mínimo de estabilidad. Desde la última beta2, se han corregido algunos bug y se han incluido algunas características como el soporte al mecanismo de cifrado <a title="Soporte al algoritmo Bcrypt en Symfony 2.2.0 [eng] - Github" href="https://github.com/symfony/symfony/commit/9d089ef998bd49637f455b668d7fd353d851ceb9" target="_blank"><em><strong>BCrypt</strong></em></a> para la codificación de <em>password</em>. Tienes disponibles <a title="Diferencias Symfony 2.2.0 beta2 y Symfony 2.2.0 RC2" href="https://github.com/symfony/symfony/compare/v2.2.0-BETA2...2.2" target="_blank">todas las diferencias desde la última beta</a>.
+
+<!--more-->
+
+<h3>Probar Symfony 2.2.0 RC2</h3>
+Como siempre, el método más recomendado es crear un nuevo proyecto con composer:
+
+<code class="prettyprint">$ php composer.phar create-project symfony/framework-standard-edition somewhere/ 2.2.0-RC2
+</code>
+
+También puedes descargar el proyecto <a title="Syfmony2 Standard Edition" href="http://symfony.com/download" target="_blank"><em>ready-made</em></a> de la edición estándar.
+
+Si por el contrario, usas componentes sueltos, la actualización pasa por actualizar <em>composer.json</em> o descargar los componetes manualmente: <code class="prettyprint">https://github.com/symfony/{nombre_componente}/archive/v2.2.0-RC2.zip;</code>
+
+Si actualizas desde la versión 2.1, no olvides <a href="https://github.com/symfony/symfony/blob/master/UPGRADE-2.2.md" target="_blank">revisar el archivo de actualización hacia la 2.2</a>.

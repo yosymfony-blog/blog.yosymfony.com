@@ -1,0 +1,109 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - composer
+permalink: /publicar-un-componente-php-con-composer
+no_html_extension: true
+layout: post
+title: 'Publicar un componente PHP con Composer'
+
+---
+<img class="alignnone size-full wp-image-322" alt="composer-logo" src="/assets/wp-content/uploads/2013/05/composer-logo.png" width="91" height="110" />Cuando terminamos un componente/librería PHP pasamos a la fase de publicación y publicar es algo más que exponer el código bajo una licencia (libre o no); Consiste, además, en proveer el todas las facilidades posibles para que los desarrolladores la adopten y en los tiempos actuales y en el mundo PHP todo funciona con <a href="http://getcomposer.org/" target="_blank"><strong>Composer</strong></a>. <strong>Composer es un gestor de dependencias</strong>, es decir, una aplicación que se encarga de obtener las librerías de las que depende un proyecto. Todas estas dependencias quedan descritas en un sencillo fichero llamado <code class="prettyprint">composer.json</code>. Para nuestro caso, escribiremos un composer.json que describirá a nuestro componente (nombre, autor, descripción etc...) e indicaremos la las dependencias (si las tiene) y la versión de PHP que necesita.
+
+<!--more-->
+<h3>Estructura básica de composer.json</h3>
+Como ejemplo, el composer.json del componente <a href="https://github.com/yosymfony/Toml" target="_blank"><strong>Yosymfony/TOML</strong></a>:
+<pre class="prettyprint">{
+    "name": "yosymfony/toml",
+    "description": "A PHP parser for TOML compatible with TOML v0.1.0",
+    "type": "library",
+    "keywords": ["toml","parser"],
+    "homepage": "http://github.com/yosymfony/toml",
+    "license": "MIT",
+    "authors": [
+	{
+		"name": "Victor Puertas",
+		"email": "vpgugr@gmail.com",
+		"homepage": "http://yosymfony.com"
+	}
+    ],
+    "require": {
+	"php": "&gt;=5.3.0"
+    },
+    "autoload": {
+	"psr-0": {
+		"Yosymfony\\Toml": "src/"
+	}
+    }
+}</pre>
+<a href="http://getcomposer.org/doc/04-schema.md#name" target="_blank"><strong>name</strong></a>: Nombre del componente. Se usa el siguiente patrón "vendor/nombre proyecto". Vendor podría ser la entidad/organización o usuario que crea el componente.
+
+<a href="http://getcomposer.org/doc/04-schema.md#description" target="_blank"><strong>description</strong></a>: Breve descripción del componente (no más de una línea).
+
+<a href="http://getcomposer.org/doc/04-schema.md#type" target="_blank"><strong>type</strong></a>: Información del tipo de componente. El valor por defecto es <em>library</em>. Otros valores muy usados son los siguientes:
+<ul>
+	<li><span><strong style="line-height: 13px;">project: </strong><span style="line-height: 13px;">Indica que se trata de un proyecto y no de una librería. Este tipo puede ser útil para que los IDEs carguen el entorno en función del tipo de proyecto: Symfony, Drupal etc...</span> </span></li>
+	<li><strong>metapackage: </strong>Es un paquete especial que hace referencia a otros paquetes, es decir, permite agrupar un conjunto de librerías bajo un mismo nombre.</li>
+	<li><strong>composer-installer</strong>: Este es un tipo que se suele emplear cuando requerimos de instalaciones especiales.</li>
+</ul>
+En realidad, en el campo <em>type</em> se puede emplear cualquier cadena de  texto como symfony-bundle, wordpress-plugin o cualquier otro nombre identificativo ya que su principal utilidad se produce cuando nuestro componente/librería requiere de un instalador especial que podemos crear para personalizar las acciones que se llevan a cabo durante este proceso.
+
+<a href="http://getcomposer.org/doc/04-schema.md#keywords" target="_blank"><strong>keywords</strong></a>: (opcional) Array de palabras clave que definen al componente. Se emplea en búsquedas y filtrados de contenido.
+
+<a href="http://getcomposer.org/doc/04-schema.md#homepage" target="_blank"><strong>homepage</strong></a>: (opcional) URL de la página web del componente o proyecto.
+
+<a href="http://getcomposer.org/doc/04-schema.md#license" target="_blank"><strong>license</strong></a>: (opcional) Nombre de la licencia bajo la que se publica el componente. Puede ser una cadena de texto o un array de las mismas. <strong>Aunque esta propiedad es opcional, es muy recomendable usarla ya que la licencia no es un tema de menor importancia</strong>. La notación recomendada para las principales licencias es la siguiente: Apache-2.0, BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, LGPL-3.0, LGPL-3.0+, MIT. Puedes encontrar el identificador de todas las licencias libres <a title="Identificadores de licencias open source" href="http://spdx.org/licenses/" target="_blank"><strong>spdx.org</strong></a>.
+
+En caso de desarrollar software propietario, puedes usar el identificador <strong>proprietary</strong>.
+
+En ocasiones, el código lo publicamos bajo los términos de más de una licencia como LGPL y GPL. En este caso, detallamos las licencias como array:
+<pre class="prettyprint">{
+    "license": [
+       "LGPL-2.1",
+       "GPL-3.0+"
+    ]
+}</pre>
+También puedes usar esta notación alternativa para definirlas en un solo string:
+<pre class="prettyprint">{
+    "license": "(LGPL-2.1 or GPL-3.0+)" // Más humano. También se puede emplear "and"
+}</pre>
+<a href="http://getcomposer.org/doc/04-schema.md#authors" target="_blank"><strong>authors</strong></a>: Información acerca de los autores del componente. Es un array de objetos en el que cada uno puede contener las siguientes propiedades:
+<ul>
+	<li><span style="line-height: 13px;"><strong>name</strong>: nombre del autor.</span></li>
+	<li><strong>email</strong>: dirección email del autor.</li>
+	<li><strong>homepage</strong>: página web del autor: blog, github etc...</li>
+	<li><strong>role</strong>: rol desempeñado en el proyecto: developer, translator etc...</li>
+</ul>
+<a href="http://getcomposer.org/doc/04-schema.md#package-links" target="_blank"><strong>require</strong></a>: Esta es una de las propiedades más importantes ya que indica el nombre y la versión de componentes que necesita nuestra librería para funcionar. <strong>Si no se cumplen todas los requisitos, no se instalará nuestro componente</strong>:
+<pre class="prettyprint">{
+    "require": {
+        "php": "&gt;=5.3.0",
+        "monolog/monolog": "1.0.*" // Nuestro componente requiere de Monolog 1.0.x
+    }
+}</pre>
+Existe otra propiedad llamada<a href="http://getcomposer.org/doc/04-schema.md#require-dev" target="_blank"><strong> require-dev</strong> </a>que describe dependencias para el entorno de desarrollo. Muy útil para realizar unit-tests.
+
+Require tiene varias formas de expresar la versión necesaria de un componente así como el nivel mínimo de estabilidad. Lo mejor es <a href="http://getcomposer.org/doc/04-schema.md#package-links" target="_blank">visitar la documentación</a> en Composer.
+
+<a href="http://getcomposer.org/doc/04-schema.md#autoload" target="_blank"><strong>autoload</strong></a>: Establece información sobre la carga automática de clases. Lo más aconsejable es desarrollar nuestra librería siguiendo el estándar<a title="PHP PSR-0" href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md" target="_blank"><strong> PSR-0</strong> </a>que establece una relación entre la estructura de directorios y los <em>namespaces</em> de nuestras clases.
+<pre class="prettyprint">{
+    "autoload": {
+        "psr-0": {
+            "Yosymfony\\Toml": "src/",
+            "Vendor\\Namespace\\": "src/",
+            "Vendor_Namespace_": "src/"
+        }
+    }
+}</pre>
+El primer elemento de psr-0 indica que el namespace <code class="prettyprint">Yosymfony\Toml</code> debe comenzar a resolverse a partir del directorio <code class="prettyprint">src</code>.
+
+Si no quieres usar PSR-0, Composer admite otros métodos como <a href="http://getcomposer.org/doc/04-schema.md#classmap" target="_blank"><strong>Classmap</strong></a> o <a href="http://getcomposer.org/doc/04-schema.md#files" target="_blank"><strong>files</strong></a> aunque no es lo más recomendado.
+<h3>Usar el componente en un proyecto o librería</h3>
+Para usarlo, simplemente debemos incluirlo como dependencia:
+<pre class="prettyprint">"require": {
+    "yosymfony/toml": "dev-master"
+}</pre>
+Esta es la forma más sencilla de incluir una dependencia y para usarla debemos registrar nuestro componente en <a href="http://packagist.org" target="_blank"><strong>packagist.org</strong></a>. Packagist es un servicio creado por los autores de Composer que establece la relación entre el nombre del componente, en este caso yosymfony/toml, y el código fuente alojado en un repositorio tipo Git, SVN o Hg que sea accedido mediante URL (con Github lo tienes muy fácil). Si no quieres usar packagist como repositorio, podes crear los <a href="http://getcomposer.org/doc/04-schema.md#repositories" target="_blank">tuyos</a>.

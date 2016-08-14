@@ -1,0 +1,55 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - Symfony
+tags:
+    - laravel
+    - symfony2
+permalink: /symfony2-o-laravel
+no_html_extension: true
+layout: post
+title: 'Symfony2 o Laravel'
+
+---
+Hace unos días, se creó una interesante discusión en Reddit entorno a <a title="Symfony2 vs Laravel" href="http://www.reddit.com/r/PHP/comments/1bdln1/symfony2_vs_laravel/" target="_blank"><strong>si la mejor opción es Symfony2 o Laravel</strong></a>. Como siempre, ante este tipo de preguntas, la respuesta es <strong>depende</strong>. La elección de un framework y otro, incluso hay situaciones en las que es mejor no usar framework alguno, está condicionada por muchos factores como la envergadura del proyecto, experiencia previa, calidad de la documentación o tiempo de entrega del proyecto.
+
+<!--more-->
+
+Los comentarios de la discusión son muy interesantes y es muy recomendable su lectura. Que quede constancia que no soy usuario de Laravel, aunque tengo una tarea mental que me dice que tengo que dedicar unas horas a probarlo. Symfony2 es un framework en el que se puede trabajar a todos los niveles. Podemos decidir trabajar en lo que podríamos llamar la capa RAD en la que creamos prototipos rápidamente mediante bundles como <strong><a href="http://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/index.html" target="_blank">SensioFrameworkExtraBundle</a>, <a href="http://sonata-project.org/bundles/admin/master/doc/index.html" target="_blank">SonataAdminBundle</a></strong> o <a href="http://rad.knplabs.com/" target="_blank"><strong>KnpRadBundle</strong></a> que facilitan enormemente las tareas habituales, esas que podrían cubrir el 80% de los pequeños y medianos proyectos web. Una especial atención merece KnpRadBundle que simplifica acciones relacionadas con las rutas, formularios, inyecciónes de dependencias etc... Symfony2 posee un <a href="http://knpbundles.com/" target="_blank"><strong>enorme ecosistema de bundles</strong></a> que extienden el framework y ayudan al desarrollador a disminuir el tiempo de entrega.
+
+Laravel es más parecido a <a href="http://silex.sensiolabs.org/" target="_blank">Silex, un microframework desarrollado por Sensio Labs</a> inspirado en <a href="http://www.sinatrarb.com/" target="_blank">Sinatra</a> (microframework en Ruby) y basado en los principales componentes de Symfony2, como el <a href="https://github.com/symfony/HttpKernel" target="_blank"><em>HttpKernel</em></a>, en el que se simplifican mucho las cosas. De hecho, Silex y Laravel comparten conceptos como "Service providers" que añaden funcionalidad a la aplicación.
+
+&nbsp;
+<div class="row">
+<div class="span4">
+
+<strong>Hola mundo en Laravel:</strong>
+<pre class="prettyprint">Route::get('/', function()
+{
+    return "Hello World!";
+});</pre>
+</div>
+<div class="span4">
+
+<strong>Hola mundo en Silex:</strong>
+<pre class="prettyprint">$app = new Silex\Application(); 
+
+$app-&gt;get('/', function() use($app) { 
+    return 'Hello World!'; 
+}); 
+
+$app-&gt;run();</pre>
+</div>
+</div>
+Ambos ejemplos tiene una forma de trabajar parecida, aunque este ejemplo no muestra ni el más mínimo potencial de ambos framework. Una de las partes más interesantes de Laravel que no se encuentra en Silex es el soporte de serie al mapeo de objetos relacionales -ORM- mediante un componente llamado <a href="http://laravel.com/docs/database/eloquent" target="_blank">Eloquent</a>. Silex tiene soporte a Doctrine Dbal mediante <a href="http://librosweb.es/silex/apendice_a/doctrineserviceprovider.html" target="_blank">DoctrineServiceProvider</a> pero esto no es un ORM. Symfony2 usa <a href="http://symfony.com/doc/current/book/doctrine.html" target="_blank">Doctrine</a> como ORM por defecto.
+
+Otras características interesantes de Laravel es la inclusión de una API unificada para procesar colas mensajes con <em>drivers</em> para los algunos de los principales sistemas de gestión como <a href="http://www.iron.io/" target="_blank">IronMQ</a> y <a href="http://aws.amazon.com/es/sqs/" target="_blank">Amazon SQS</a>.
+
+Como comentario final, resaltar que el crecimiento de Laravel es patente, que se trata de un framework que pretende fomentar una forma de desarrollar clara, intentando no complicar las cosas. Symfony2 permite trabajar a cualquier nivel: usando las convenciones y bundles y un poco de configuración podemos tener prototipos rápidos pero Symfony2 permite trabajar a más bajo nivel con componentes reutilizables  totalmente desacoplados.
+
+&nbsp;
+
+Lectura adicional: "<strong><a href="http://pooteeweet.org/blog/2205" target="_blank">Good design is no excuse for wasting time</a></strong>" de <em>Lukas Kahwe Smith</em>.
+
+Reddit: <a href="http://www.reddit.com/r/PHP/comments/1bdln1/symfony2_vs_laravel/" target="_blank"><strong>Symfony2 vs Laravel</strong></a>.

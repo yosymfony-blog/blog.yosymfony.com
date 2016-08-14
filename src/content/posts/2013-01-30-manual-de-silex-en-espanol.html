@@ -1,0 +1,39 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+    - Symfony
+tags:
+    - libros
+    - micro-framework
+    - silex
+permalink: /manual-de-silex-en-espanol
+no_html_extension: true
+layout: post
+title: 'Manual de Silex en español'
+
+---
+<img class="alignnone size-full wp-image-85" alt="silex-logo" src="/assets/wp-content/uploads/2013/01/silex-logo.png" width="92" height="88" />Silex es un <em>microframework</em> desarrollado por <a href="http://sensiolabs.com/" target="_blank">Sensio Labs</a>, los creadores de Symfony, destinado a la pequeña y mediana aplicación. Aunque Symfony es uno de los mejores <em>web framework</em> para desarrollar grandes aplicaciones de forma ágil y siguiendo buenas prácticas, no parece muy lógico emplearlo en pequeños proyecto que apenas usan base de datos. El concepto sobre el que pivota Silex es el de microframework, es decir, que nuestra solución se encuentre entera contenida en un solo archivo:
+<pre class="prettyprint">// index.php
+
+require_once __DIR__.'/../vendor/autoload.php';
+
+$app = new Silex\Application();
+
+$app-&gt;get('/usuario/{name}', function ($name) use ($app) {
+    return 'Bienvenido '.$app-&gt;escape($name);
+});
+
+$app-&gt;run();</pre>
+<!--more-->
+
+Este es un ejemplo sencillo que contiene definida una ruta y la acción asociada a ella. Para probarlo, basta con acceder a /usuario/yoSymfony y verás que responde "Bienvenido yoSymfony". Por supuesto, requiere tener <a href="http://www.symfony.es/noticias/2013/01/30/silex-desarrollo-web-%C3%A1gil-y-profesional-con-php/" target="_blank"><strong>Silex</strong> instalado</a> tal como explica Javier Eguiluz.
+
+<strong>Silex</strong> tiene soporte para realizar pruebas funcionales mediante el módulo <a title="Módulo httpkernel de Symfony2" href="https://github.com/symfony/HttpKernel" target="_blank"><em>HttpKernel</em></a> de Symfony2 que incluye.
+
+Gracias a <a title="Manual de Silex microframework en español" href="http://librosweb.es/silex/" target="_blank"><strong>Librosweb.es</strong></a> disponemos del manual oficial traducido al español. Publicación que se une a su ya extensa lista.
+
+&nbsp;
+
+<a href="http://librosweb.es/silex/" target="_blank">Manual de Silex en español</a>.

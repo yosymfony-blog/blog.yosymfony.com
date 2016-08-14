@@ -1,0 +1,23 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+    - Symfony
+tags:
+    - micro-framework
+    - silex
+    - slim
+permalink: /micro-framerwork-significa-pequeno
+no_html_extension: true
+layout: post
+title: '¿Micro-framework significa pequeño?'
+
+---
+<img class="alignnone size-full wp-image-85" alt="silex-logo" src="/assets/wp-content/uploads/2013/01/silex-logo.png" width="92" height="88" />Me llama poderosamente la atención un artículo de <a title="Blog de Igor Wiedler" href="https://igor.io/2013/09/02/how-heavy-is-silex.html" target="_blank"><em>Igor Wiedler</em> titulado "<strong>How heavy is Silex?</strong>"</a> en el que habla acerca de la filosofía de Silex y de como el término <em>micro-framework</em> no significa para todos lo mismo. El término es ambiguo porque no está claro que micro se refiera a pocas líneas de código, número bajo de clases cargadas o pocas restricciones en cuanto a la forma de trabajar. Para mí, el término <em>micro-framework</em> significa un poco de todo lo anterior. Las partes básicas de un framework como es el <a title="Inyección de dependencias" href="http://en.wikipedia.org/wiki/Dependency_injection" target="_blank"><em>DI</em></a>, <em>router</em>, la gestión de errores, la seguridad, el <em>logger</em> y la renderización de templates se deben hacer con el menor número de clases y dependencias posible.
+
+<!--more-->
+
+<strong>Silex es un micro framework escrito sobre 7 dependencias de las cuales 5 son componentes Symfony</strong>. Probablemente, escribir todo esto desde cero se traduce en menor número de líneas de código y clases pero estaríamos perdiendo la capacidad de reutilizar componentes e interoperabilidad. A decir verdad, Silex usa un número bajo de componentes si lo comparamos con otros framework: Symfony2 usa alrededor de 40, Laravel 58 y Zend Framework 2 unos 49. El caso de <strong><a title="Slim micro framework en GitHub" href="https://github.com/codeguy/Slim" target="_blank">Slim</a>,</strong> uno de los micro framework más conocidos, es especial porque se ha concebido desde cero, sin reutilizar componentes de otros framework y con un objetivo claro: ser pequeño en todo. Si nos fijamos en su <code class="prettyprint"><a href="https://github.com/codeguy/Slim/blob/master/composer.json" target="_blank">composer.json</a></code> no requiere más que un componente. En Silex, durante una ejecución típica intervienen 50 clases que hacen un total de <strong>4018 NCLOC </strong>-<em>Non-Comment Line of Code</em>- que es de 2 a 4 veces más que lo empleado por Slim.
+
+Lo interesante de Silex y otros framework (Laravel) es que para la gestión de las peticiones usa componentes que tiene un gran apoyo de la comunidad y que reciben actualizaciones a diario. Componentes que se han convertido en un <a href="/symfony2-en-el-corazon-de-otros-framework" target="_blank">estándar <em>de facto</em> para desarrollar framework</a> como es el caso de Drupal o Magento.

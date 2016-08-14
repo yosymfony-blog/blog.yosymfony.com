@@ -1,0 +1,37 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - Symfony
+tags:
+    - bundles
+    - symfony2
+permalink: /symfony2-organizar-de-los-bundles-de-un-proyecto
+no_html_extension: true
+layout: post
+title: 'Symfony2: organizar de los bundles de un proyecto'
+
+---
+<img class="size-full wp-image-62 alignnone" alt="symfony2-logo" src="/assets/wp-content/uploads/2013/01/symfony2-logo.png" width="255" height="73" />Los <em><strong>bundles</strong></em> son un concepto nuevo que aparece con Symfony2 y son una parte muy importante de la filosofía Symfony. Symfony no es solo un framework, que nos facilita las tareas rutinarias, sino que también es una forma de trabajar. Siguiendo su metodología ahorraremos tiempo en implementar un proyecto. <strong>Los bundles son divisiones lógicas de un proyecto</strong>. Se organizan en carpetas con una <a href="http://symfony.com/doc/2.0/cookbook/bundles/best_practices.html#directory-structure" target="_blank">estructura conocida</a>. Aunque podríamos elegir otra, no sería lo mas conveniente si queremos aprovechar todas las facilidades del framework.
+
+<!--more-->
+
+<strong>Antes de crear un nuevo proyecto hay que realizar una buena planificación</strong> por lo que tendríamos que tener claras las entidades del modelo de datos, los bundles en los que se dividirá y las rutas que lo conforman. Con respecto a los bundles, inicialmente es complejo realizar una separación y más cuando puedes tener partes del proyecto dudosas pero por las experiencia acumulada hay algunos bundles que se repiten y esos son los que voy a describir. Por supuesto, esto es meramente orientativo y al final, cada programador toma sus decisiones.
+<h3>Estructura base</h3>
+<img class="aligncenter size-full wp-image-246" alt="bundles-symfony2" src="/assets/wp-content/uploads/2013/03/bundles-symfony2.png" width="635" height="130" />
+
+<strong>CommonBundle:</strong> es un bundle transversal. Contiene lógica que podría ser usada por cualquier otro bundle. Cosas como utilidades o las <a href="http://twig.sensiolabs.org/" target="_blank">plantillas Twig</a> generales se pueden albergar en el perfectamente. Además, este bundle puede recibir aquellas características que no encajen en ningún otro.
+
+<strong>UserBundle:</strong> alberga todo lo referente al usuario: página de login, alta de nuevos usuarios, dashboard etc...
+
+<strong>StaticBundle:</strong> almacena contenido estático. Simplemente son vistas que cargaremos directamente <a href="http://symfony.com/blog/new-in-symfony-2-2-cache-support-for-static-pages" target="_blank">sin crear un controlador específico</a> ya que lo hace por nosotros Symfony mediante el <em>FrameworkBundle</em>.
+
+<strong>ApiBundle:</strong> si el proyecto publica una API, este bundle almacena todos sus controladores y rutas. La API exponen parte o toda la funcionalidad del proyecto al exterior para que terceros puedan integrarla en sus servicios lo que, sin duda, reportará beneficios al proyecto.
+
+<strong>BackendBundle:</strong> Todo lo relacionado con la administración del proyecto. Normalmente, el acceso al Backend está restringido a usuarios administradores. Por ejemplo. si el proyecto está relacionado con el <em>e-commerce</em>, desde el backend se crearán ofertas, alta de productos etc...
+
+&nbsp;
+<h4>ApiBundle</h4>
+Las APIs de un proyecto tiene especial importancia y requiere de organizar bien el código. Por lo general, la lógica de negocio es compartida entre los accesos desde la web y los de la API. Ello obliga a implementar la menor lógica posible en los controladores y trasladarla a clases. Mediante el <a title="Inyector de dependencias - Symfony2" href="http://symfony.com/doc/current/components/dependency_injection/introduction.html" target="_blank"><em><strong>Inyector de dependencias</strong></em></a>, tendremos todo lo necesario para llevar a cabo cualquier tarea.
+
+Es probable que algunos/todos de los métodos expuestos requieran autenticación/autorización por lo que es recomendable usar protocolos como <strong><a title="Estándar OAuth" href="http://oauth.net/" target="_blank">OAuth</a></strong>. <strong><a title="OAuth 2.0 en Symfony2" href="https://github.com/FriendsOfSymfony/FOSOAuthServerBundle" target="_blank">FOSOAuthServerBundle</a></strong> permite implementar un servidor OAuth 2.0 que cualquier cliente OAuth puede consumir, incluidos los dispositivos móviles. <a title="OAuth en Android" href="http://developer.android.com/training/id-auth/authenticate.html" target="_blank">Android</a> implementa soporte de serie para este protocolo. En <a title="OAuth en iOS - StackOverflo2" href="http://stackoverflow.com/questions/2901511/iphone-oauth-tutorial" target="_blank">iPhone, mediante librerías externas)</a>. Por último, una API requiere buena documentación, por lo que <a title="Documentación de API REST en Symfony2" href="https://github.com/nelmio/NelmioApiDocBundle" target="_blank"><strong>NelmioApiDocBundle</strong></a> es genial para este propósito.

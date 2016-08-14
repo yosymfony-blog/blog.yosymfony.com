@@ -1,0 +1,33 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - bug
+    - 'php 5.3'
+    - 'php 5.4'
+permalink: /vulnerabilidad-soap-en-php-5-3x-y-5-4x
+no_html_extension: true
+layout: post
+title: 'Vulnerabilidad SOAP en PHP 5.3x y 5.4x'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" />Hoy <a href="http://www.zend.com/en/" target="_blank"><strong>Zend Technologies</strong></a> ha anunciado, a través de su cuenta <a href="https://www.facebook.com/ZendTechnologies/posts/10151452763862140" target="_blank">Facebook</a> y en <a href="http://twitter.com/zend" target="_blank">Twitter</a>, el descubrimiento de una<strong> vulnerabilidad en la implementación de servicios SOAP que afecta a las versiones 5.3.x y 5.4.x</strong>:
+<blockquote cite="https://www.facebook.com/ZendTechnologies/posts/10151452763862140">IMPORTANT -- we've just released a fix for a SOAP security vulnerability in PHP. More details on the vulnerability to be announced soon, after core PHP releases its fix. In the meantime, if you're on Zend Server you can get patched immediately!
+&nbsp;
+PHP in Zend Server 6 is already fixed, no action is required.
+&nbsp;
+PHP in Zend Server 5.6 should be updated immediately if you use SOAP. If on Linux, update from your repository; if on Windows or IBM i download hotfixes from:
+<a href="http://www.zend.com/en/products/server/downloads-prev" target="_blank" rel="nofollow nofollow">http://www.zend.com/en/products/server/downloads-prev</a>
+&nbsp;
+We'll be reaching out to all our customers to make sure they're aware of the issue and have taken appropriate action.</blockquote>
+<!--more-->
+
+Más tarde dejaba claro en Twitter que<strong> no es un problema exclusivo de Zend Server 6</strong>:
+<blockquote class="twitter-tweet" lang="es">To clarify: <a href="https://twitter.com/search/%23SOAP">#SOAP</a> vulnerability is <a href="https://twitter.com/search/%23PHP">#PHP</a> wide, not just Zend Server; stay tuned for details.(But Zend Server is already patched!)
+
+— zend (@zend) <a href="https://twitter.com/zend/status/303429422910951424">18 de febrero de 2013</a></blockquote>
+Por el momento no hay más información y argumentan que habrá una nueva actualización pronto de las ramas 5.3 y 5.4. La última actualización se realizó el <a title="Nuevas versiones PHP 5.4.11 y PHP 5.3.21" href="/nuevas-versiones-php-5-4-11-y-php-5-3-21" target="_blank">pasado Enero</a>.
+
+Pues nada, si eres usuario de Zend Server 6 <a title="Zend Server 6" href="http://www.zend.com/en/products/server/downloads-prev" target="_blank"><strong>tienes una corrección disponible</strong></a>. El resto deberá esperar.

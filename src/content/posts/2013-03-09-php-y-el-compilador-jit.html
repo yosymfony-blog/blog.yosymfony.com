@@ -1,0 +1,32 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - 'compilador jit'
+    - hhvm
+    - llvm
+permalink: /php-y-el-compilador-jit
+no_html_extension: true
+layout: post
+title: 'PHP y el compilador JIT'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" />Hoy he leído una <a href="http://marc.info/?l=php-internals&amp;m=135397984203784&amp;w=2" target="_blank">interesante discusión en la <em>Internals list</em> de PHP sobre incluir un compilador JIT como parte del núcleo de PHP</a> para transformar los <em>bytescodes</em> de los script a código nativo de la máquina en la que se ejecuta. Esto conllevaría una mejora de rendimiento, como la que obtiene Facebook con <strong><a href="http://www.facebook.com/note.php?note_id=10150415177928920" target="_blank">HHVM</a></strong> -<em>HipHop Virtual Machine</em>-.
+
+<!--more-->
+
+La discusión comienza cuando un usuario sugiere que sería muy interesante incluir en el núcleo de PHP un compilador al estilo HHVM para mejorar el rendimiento. Inmediatamente contesta <a title="Twitter de Rasmus Lerdorf" href="https://twitter.com/rasmus" target="_blank">Rasmus Lerdorf</a>, creador de PHP, que HHVM no sería la solución más adecuada sino que la mejor aproximación sería un compilador basado en <strong><a href="http://es.wikipedia.org/wiki/LLVM" target="_blank">LLVM</a> </strong>-<em>Low Level Virtual Machine</em>-. Tras varias contestaciones, incluidas las de <a href="http://www.linkedin.com/in/pollita" target="_blank">Sara Golemon</a>, ingeniera de Facebook, se concluye que HHVM no es la mejor opción puesto que se trata de una reimplementación completa de PHP y no podría unirse al núcleo. La <a href="http://marc.info/?l=php-internals&amp;m=135431422317954&amp;w=2" target="_blank">solución aportada por Sara Golemon</a> consiste en adjuntar el compilador JIT como una extensión e interceptar la función <em>zend_compile_file</em>, al estilo de APC, para realizaría el paso de <em>bytescodes</em> a código nativo durante la primera ejecución. El resto de ejecuciones invocarían al compilador JIT que lanzaría el código compilado.
+
+Incluir mecanismo de este tipo es una <a href="http://www.facebook.com/pages/HipHop/112018472149183?rf=113384742005644#" target="_blank">petición muy generalizada</a> a muchos usuarios de PHP y es que, si bien PHP en consola es realmente rápido, cuando interactúa con con  el servidor para resolver peticiones merma un poco en rendimiento. Esto es lo que ha llevado a Facebook, una red social desarrollada, en su mayor parte en PHP, a buscar alternativas que permitan ganar en velocidad.
+
+&nbsp;
+
+GitHub: <a href="https://github.com/facebook/hiphop-php/wiki" target="_blank"><strong>HipHop de Facebook</strong></a>.
+
+GitHub: <strong><a href="https://github.com/preillyme/llvm" target="_blank">LLVM para PHP</a></strong>. (Es una primera aproximación y tiene mucho que mejorar)
+
+LLVM: <strong><a title="LLVM Developer Group" href="http://llvm.org/" target="_blank">Developer Group</a></strong>.
+
+YoSymfony: <strong><a title="PHP: Escalabilidad y rendimiento" href="/php-escalabilidad-y-rendimiento" target="_blank">Escalabilidad y rendimiento en PHP</a></strong>.

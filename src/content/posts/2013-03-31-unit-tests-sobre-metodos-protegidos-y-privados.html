@@ -1,0 +1,46 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - 'unit test'
+permalink: /unit-tests-sobre-metodos-protegidos-y-privados
+no_html_extension: true
+layout: post
+title: 'Unit tests sobre métodos protegidos y privados'
+
+---
+<img class="alignnone size-full wp-image-263" alt="unit-tests" src="/assets/wp-content/uploads/2013/03/unit-tests.png" width="80" height="94" />Los test sobre las clases que escribimos son unas de las herramientas más importantes que poseemos como desarrolladores. Gracias a ellos, certificamos que todo funciona tal y como esperamos. Incluso puede llegar a ser mejor práctica crear los test antes de escribir cualquier código, tal y como indica la metodología <a title="Test-driven development" href="http://es.wikipedia.org/wiki/Desarrollo_guiado_por_pruebas" target="_blank"><em><strong>Test-driven Development</strong> </em>o <em>TDD</em></a> por el acrónimo que forma. Testar a los métodos y propiedades públicas son las tereas habituales y en PHP se suelen realizar con <a href="https://github.com/sebastianbergmann/phpunit/" target="_blank"><strong>PhpUnit</strong></a>. El problema es que en algunas ocasiones, necesitamos comprobar que los métodos privados o protegidos funcionan correctamente y es en estos casos donde encontramos una barrera. Para eliminar esta barrera necesitamos hacer uso de la <a href="http://php.net/manual/es/intro.reflection.php" target="_blank"><strong>API de reflexión que ofrece PHP 5</strong> </a>y para facilitarnos el trabajo, existe un proyecto en <a href="https://github.com/chrismcmacken/phptools/tree/master/friend" target="_blank"><strong>GitHub</strong></a> que aprovecha el concepto de función amiga de C++, aquella función que era externa a una clase pero que tenía permisos para acceder a métodos privados y protegidos.
+
+<!--more-->
+<h3>¿Cómo usar la librería?</h3>
+Estas funciones amigas forman parte del proyecto <a href="https://github.com/chrismcmacken/phptools" target="_blank"><strong>PhpTools</strong></a> y su uso es sencillo. Lo mejor, como siempre, un ejemplo:
+<pre class="prettyprint">class MiClase {
+    private $varPrivada = 'privada';
+
+    private function funcionPrivada() {
+        return 'función privada';
+    }
+}
+
+$miClase = new MiClase();
+
+echo $miClase-&gt;varPrivada;  // Genera un "fatal error
+// --&gt; Cannot access private property MiClase::$varPrivada"
+
+echo $miClase-&gt;funcionPrivada();  // Genera un "fatal error
+// --&gt; Call to private method MiClase::funcionPrivada()"
+
+$friend = new Friend($miClase);
+
+echo $friend-&gt;funcionPrivada();  // $&gt; función privada
+echo $friend-&gt;varPrivada;        // $&gt; privada
+
+$friend-&gt;varPrivada = 'nuevo valor';
+echo $friend-&gt;varPrivada;        // $&gt; nuevo valor</pre>
+Gracias a la clase <code class="prettyprint">Friend</code> creamos un envoltorio que nos permite acceder a funciones y variables privadas. Para evitar conflictos con los nombres de métodos propios de nuestra clase, <code class="prettyprint">Friend</code> solo expone métodos mágicos y algunos métodos con el prefijo <code class="prettyprint">__friend</code>. Ahora, ya podemos usar cualquier <em>assert</em> de PhpUnit.
+
+&nbsp;
+
+GitHub: <a href="https://github.com/chrismcmacken/phptools" target="_blank"><strong>PhpTools</strong></a>.

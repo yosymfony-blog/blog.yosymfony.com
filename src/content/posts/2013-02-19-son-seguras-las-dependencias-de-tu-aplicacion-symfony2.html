@@ -1,0 +1,29 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+    - Symfony
+tags:
+    - bug
+    - seguridad
+permalink: /son-seguras-las-dependencias-de-tu-aplicacion-symfony2
+no_html_extension: true
+layout: post
+title: '¿Son seguras las dependencias de tu aplicación Symfony2?'
+
+---
+<img class="alignnone size-full wp-image-181" style="margin: 5px;" alt="Sensio-labs-logo" src="/assets/wp-content/uploads/2013/02/sensio-labs-logo.png" width="147" height="40" />Hoy <strong>Fabien Potencier</strong>, creador de Symfony, ha anunciado en su <a href="http://fabien.potencier.org/article/67/don-t-use-php-libraries-with-known-security-issues" target="_blank">blog</a> que <a href="http://sensiolabs.com/en" target="_blank">Sensio Labs</a> pone a nuestro alcance una <a title="Comprueba las vulnerabilidades de tu aplicación Symfony2" href="https://security.sensiolabs.org/" target="_blank">herramienta</a> para comprobar las <strong>vulnerabilidades existentes en las dependencias de nuestros proyectos Symfony o Zend framework</strong> siempre que usemos <a title="PHP Composer" href="http://getcomposer.org/" target="_blank"><strong>Composer</strong></a> como gestor de dependencias. La iniciativa es realmente buena porque a estas alturas de partido, Symfony se ha masificado y existen <a title="Case studies [eng] - Symfony" href="http://symfony.com/blog/category/case-studies" target="_blank">grandes proyectos cuyo funcionamiento depende de que el framework y sus bundles</a> trabajen de forma correcta y segura. Además Fabien asegura que se están mejorando la identificación de los bug para cumplir con el <em>Common Vulnerabilities and exposures</em> o <a href="http://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=symfony" target="_blank">CVE</a>. Todo esto es otro incentivo más para usar Symfony y Composer, una estupenda aplicación que se encarga de  obtener las dependencias que necesitemos en nuestro proyecto de forma transparente, con solo lanzar un comando. No estaría nada mal que PHP tuviese algún sistema estándar de este tipo para  comprobar si las librerías/frameworks/aplicaciónes son seguras y están a la última.
+
+<!--more-->
+<h3>¿Cómo funciona el <em>Security Advisories Checker</em>?</h3>
+Tienes tres formas de usarlo,  una de ellas es mediante una API que te permitirá usarla en sistemas de Integración Contínua:
+<ul>
+	<li><span style="line-height: 13px;"><strong>Web</strong> de <a href="https://security.sensiolabs.org/" target="_blank">security.sensiolabs.org</a>: Accedes a la web y subes tu fichero <code class="prettyprint">composer.lock</code>.</span></li>
+	<li>Usar la <strong>aplicación de consola</strong> <a title="Aplicación Security Checker - Symfony2" href="https://github.com/sensiolabs/security-checker" target="_blank">Security Checker</a>:
+<code class="prettyprint">$ php security-checker security:check /tu-directorio/composer.lock</code></li>
+	<li><a title="Security Checker  API - Symfony2" href="https://security.sensiolabs.org/api" target="_blank"><strong>API</strong> del servicio</a>.</li>
+</ul>
+&nbsp;
+
+Eco de la noticia:<strong> <a href="http://fabien.potencier.org/article/67/don-t-use-php-libraries-with-known-security-issues" target="_blank">Fabien Potencier</a> | <a href="http://www.symfony.es/noticias/2013/02/19/nueva-herramienta-para-descubrir-problemas-de-seguridad-en-proyectos-php" target="_blank">Symfony.es</a></strong>

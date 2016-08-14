@@ -1,0 +1,18 @@
+# Site settings
+title: "Yo! Symfony Blog"
+
+top_menu:
+  - { name: Web, url: "http://yosymfony.com" }
+
+comments:
+  enabled: false
+  disqus_shortname: ""
+
+social_networks:
+    twitter: "yosymfony" # Your id without @
+    facebook:  # Your URL
+    instagram: # Your id
+    github: "https://github.com/yosymfony"
+    dribbble: # Your id
+    linkedin: # Your URL
+    email: # Your email adress you@yoourDomain.com

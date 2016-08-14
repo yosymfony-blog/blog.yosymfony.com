@@ -1,0 +1,26 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - 'unit test'
+permalink: /unit-tests-test-doubles-o-database-fixtures
+no_html_extension: true
+layout: post
+title: 'Unit tests: test doubles o database fixtures'
+
+---
+<img class="alignnone size-full wp-image-263" alt="unit-tests" src="/assets/wp-content/uploads/2013/03/unit-tests.png" width="80" height="94" />En numerosas ocasiones, las pruebas unitarias de un proyecto incluyen consultas a base de datos. Estas pruebas se deben realizar en entornos estáticos donde para un mismo conjunto de datos de entrada, se obtiene la misma salida por lo que necesitamos disponer de una base de datos que parte de un mismo estado cada vez que comenzamos la batería de pruebas.
+
+La realización de pruebas en las que interviene información de base de datos es habitual realizarlas mediante <em>test doubles</em> o <em>database fixtures</em>. La primera consiste en crear <em>mock</em>, falsos objetos que simulan ser el original con los datos que se espera sin realizar consulta alguna al servidor. La segunda técnica consiste disponer de un conjunto de datos de prueba con los que inicializar las tablas de base de datos antes de comenzar las pruebas.
+
+<!--more-->
+
+La elección de una u otra puede depender del gusto de cada uno pero sobretodo dependerá de la naturaleza y del entorno en el que se encuentre el proyecto.
+<h3>Database fixtures</h3>
+<strong><em>Database fixtures</em> requieren de un servidor de datos e incrementan el tiempo empleado en realizar las pruebas</strong>. En grandes proyectos con miles de ellas este parámetro puede ser crucial. <strong>Algunos programadores como <a title="@grmpyprogrammer " href="http://twitter.com/grmpyprogrammer " target="_blank">Chris Hartjes</a>, autor del libro "<a title="Web del libro The grumpy programmer's (PHP)" href="http://www.grumpy-phpunit.com/" target="_blank"><em>The grumpy programmer's</em></a>", prefieren evitar esta técnica</strong> porque la misión es probar el código, no el drivers de conexión al servidor de datos. Además,  la base de datos se va "contaminando" con la propia ejecución de las pruebas pudiendo llegar a crear situaciones no favorables para algunas de ellas.
+
+El uso de <em>data fixtures</em> con PhpUnit requiere de un complemento extra llamado <a title="PhpUnit DbUnit" href="https://github.com/sebastianbergmann/dbunit" target="_blank"><strong>DbUnit</strong></a> que permite inicializar la base de datos a un estado conocido. Este tipo de complementos imponen limitaciones, como el tipo de servidor de datos que soporta: MySQL, PostgreSQL, Oracle y SQLite. Desde luego son motores comunes pero ¿Qué pasa si nuestro proyecto usa otro, como por ejemplo, un motor tipo NO-SQL?.
+<h3>Test doubles</h3>
+<strong>Los <em>test doubles</em> son rápidos</strong>, y probablemente requieran el mismo tiempo de preparación que los <em>database fixtures</em>. Se crean mediante algún <em>mock framework</em> como <a href="https://github.com/mlively/Phake" target="_blank"><strong>Phake</strong></a> o el proporcionado por <a title="Test doubles en PhpUnit" href="http://www.phpunit.de/manual/current/en/test-doubles.html#test-doubles.mock-objects" target="_blank"><strong>PhpUnit</strong></a>. Quizá el problema en framework actuales, como Symfony, es el fuerte acoplamiento con base de datos en los que realizar <em>test doubles</em> para tareas que implican recuperar entidades puede llegar a ser complejo y tedioso.

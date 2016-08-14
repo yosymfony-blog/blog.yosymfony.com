@@ -1,0 +1,39 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - openshift
+permalink: /cliente-para-la-api-de-openshift-en-php
+no_html_extension: true
+layout: post
+title: 'Cliente para la API de OpenShift en PHP'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" /><a href="http://openshift.redhat.com" target="_blank"><strong>OpenShift</strong></a> es un PASS, <em>Platform-as-a-Service</em>, de RedHat que ofrece servicios de computación en la nube. Permite desplegar aplicaciones en PHP, Ruby, Java o Perl y dispone de un servicio <em>express</em> para desplegar de forma gratuita nuestra aplicación hecha, por ejemplo, en Symfony. Se trata de un buen servicio para comenzar con un proyecto personal o desplegar un blog ya que la versión <em>express</em> tiene una características muy interesante: 50k páginas mensuales (esto es un valor apróximado y depende del tipo de aplicación y de las técnicas que uses para servir el contenido. Por ejemplo caché) y un máximo de tres <em>Gears</em> o paquetes de recursos: conjunto de software con una cantidad de RAM y espacio en disco limitada.
+<p style="text-align: left;"><!--more--></p>
+<p style="text-align: left;">La mejor forma de comenzar con OpenShift es crearte una cuenta y registrar una aplicación desde el panel de administración vía web aunque tiene funcionalidad limitada por lo que tendrás que instalar el comando <em>rhc</em> (una gema de Ruby) para sacarle todo el partido a la instancia creada: añadir dominios a tu aplicación (por ejemplo tu .com), arrancar/parar aplicaciones o añadir nuevos Gears. Todo esto se realiza desde la consola con el comando <em>rhc</em>, pero hoy he encontrado una implementación de la <a title="Documentación de la API REST de OpenShift" href="https://access.redhat.com/knowledge/docs/en-US/OpenShift/2.0/html/REST_API_Guide/" target="_blank">API REST de OpenShift</a> para PHP. Se trata de <strong><em><a title="OpenShift API client para PHP" href="https://github.com/hasinhayder/openshift-php-client" target="_blank">OpenShift PHP Client</a>,</em></strong> un sencillo cliente que nos permite realizar cualquier opción disponible en el comando <em>rhc</em>.</p>
+<p style="text-align: left;">Un ejemplo de como usarla:</p>
+
+<pre class="prettyprint">include_once("lib/openshift.php");
+$username = "Nombre-de-usuario";
+$password = "password";
+
+$openshift = new OpenShift($username,$password);
+
+// Crea un nuevo dominio
+$data = $openshift-&gt;getDomainManager()-&gt;createDomain("yoSymfony");
+
+// Listar los dominios
+$data = $openshift-&gt;getDomainManager()-&gt;getDomains();
+
+// Renombrar dominios
+$data = $openshift-&gt;getDomainManager()-&gt;getDomain("yoSymfony")-&gt;updateName("yoSymfony2") ;
+
+// Crear una aplicación
+$data = $openshift-&gt;getDomainManager()-&gt;getDomain("yoSymfony")-&gt;createApplication("php","php-5.3");</pre>
+&nbsp;
+
+<a href="http://openshift.redhat.com" target="_blank">OpenShift de Redhat</a>
+Github: <strong><em><a title="OpenShift API client para PHP" href="https://github.com/hasinhayder/openshift-php-client" target="_blank">OpenShift PHP Client</a>.</em></strong>

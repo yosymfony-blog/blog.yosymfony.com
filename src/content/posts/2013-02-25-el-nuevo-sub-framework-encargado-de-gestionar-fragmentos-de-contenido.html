@@ -1,0 +1,67 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - Symfony
+tags:
+    - desymfony
+    - 'symfony 2.2'
+permalink: /el-nuevo-sub-framework-encargado-de-gestionar-fragmentos-de-contenido
+no_html_extension: true
+layout: post
+title: 'El nuevo sub-framework encargado de gestionar fragmentos de contenido'
+
+---
+<img class="alignnone  wp-image-62" alt="symfony2-logo" src="/assets/wp-content/uploads/2013/01/symfony2-logo.png" width="179" height="51" />Hoy se ha presentado en el blog de Symfony un nuevo<strong><a href="http://symfony.com/blog/new-in-symfony-2-2-the-new-fragment-sub-framework" target="_blank"> <em>sub-framework </em>para gestionar de forma más eficiente y desacoplada los fragmentos de contenido</a></strong> en plantillas Twig. Estos fragmentos no son más que partes de una plantilla cuyo contenido es resultado de renderizar la plantilla asociada a la acción de un controlador. Como parte de las refactorizaciones que se están llevando a cabo en la versión 2.2, se ha ha creado el <em>fragment sub-framework</em>, que es parte del <a title="Symfony2 HttpKernel" href="https://github.com/symfony/HttpKernel" target="_blank"><em>HttpKernel</em></a>, y a el se ha movido la lógica que antes se situaba en el <a title="Symfony2 FrameworkBundle" href="https://github.com/symfony/FrameworkBundle" target="_blank"><em>FrameworkBundle</em></a>.
+
+<!--more-->
+
+Con todo  esto se ha conseguido:
+<ul>
+	<li>La gestión de fragmentos de contenido está más desacoplada y es más<strong> fácil de integrar en proyectos como <a href="http://drupal.org" target="_blank">Drupal</a></strong>.</li>
+	<li>Se ha mejorado la legibilidad de código sustituyendo el parámetro <em>standalone</em> por <em>strategy</em> en la función <em>render()</em>:
+<pre class="prettyprint">{% verbatim %}{# ANTES #}
+{# Usando la estratégia sub-request #}
+{{ render(url('route_name')) }}
+
+{# Usando la estratégia ESI - Edge Side Includes #}
+{{ render(url('route_name', { strategy: 'esi' })) }}
+
+{# Usando la estratégia HInclude tag via a regular URL #}
+{{ render(url('route_name', { strategy: 'hinclude' })) }}
+
+{# AHORA #}
+{# Usando la estratégia sub-request #}
+{{ render(url('route_name')) }}
+
+{# Usando la estratégia ESI - Edge Side Includes #}
+{{ render(url('route_name', { standalone: 'esi' })) }}
+
+{# Usando la estratégia HInclude #}
+{{ render(url('route_name', { standalone: 'hinclude' })) }}{% endverbatim %}</pre>
+Además, ahora el código puede ser más bonito porque se han creado funciones para cada estratégia:
+<pre class="prettyprint">{% verbatim %}{# sub-request interno resuelta por Symfony#}
+{{ render(url('route_name')) }}
+
+{# Usando la estratégia ESI - Edge Side Includes #}
+{{ render_esi(url('route_name')) }}
+
+{# Usando la estratégia HInclude #}
+{{ render_hinclude(url('route_name')) }}{% endverbatim %}</pre>
+</li>
+	<li>Como la referencia a los fragmentos se realiza por rutas absolutas, el <em>fragment sub-framework</em> no depende del gestor de rutas:
+<pre class="prettyprint">{% verbatim %}{# Fragmento referenciado mediante URL #}
+{{ render(url('route_name')) }}{% endverbatim %}</pre>
+</li>
+	<li>Ahora se pueden emplear, mediante la<em> notación bundle</em>, la refetencia a fragmentos usando los controladores:
+<pre class="prettyprint">{% verbatim %}{# Fragmento referenciado mediante un controlador #}
+{{ render(controller('Bundle:controlador:action')) }}{% endverbatim %}</pre>
+</li>
+</ul>
+&nbsp;
+
+<strong>Profundizar más:</strong>
+
+<a title="Usar ESI en Symfony2" href="http://symfony.com/doc/current/book/http_cache.html#using-esi-in-symfony2" target="_blank">El ESI en Symfony2</a>
+
+<a href="http://www.w3.org/TR/esi-lang" target="_blank">ESI Language Specification 1.0</a>

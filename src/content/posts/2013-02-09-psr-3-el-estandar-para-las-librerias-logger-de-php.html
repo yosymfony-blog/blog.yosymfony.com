@@ -1,0 +1,67 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - logger
+    - psr
+    - psr-3
+permalink: /psr-3-el-estandar-para-las-librerias-logger-de-php
+no_html_extension: true
+layout: post
+title: 'PSR-3: El estándar para las librerías logger de PHP'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" />El <strong><a title="PSR-3 Logger interface - Github" href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md" target="_blank">PSR-3</a> es un <em>proposed-standard-request</em> que describe una interfaz común que deberían cumplir las librerías que realizan </strong><em><strong>logger</strong>, </em>registrar las acciones que ocurren durante la ejecución, en nuestras aplicaciones PHP. Los PSR son como los <a title="RFC - Wikipedia" href="http://es.wikipedia.org/wiki/Request_for_Comments" target="_blank">RFC o Request for Comments</a>, documentos que describe como se lleva a cabo una tarea y que se someten a comentarios y a voto para adoptarse como estándar.
+
+PSR-3 propone un conjunto de interfaces para que, en todas las librerías que cumplan el estándar, se registren los mensajes de igual manera. En PSR-3 cada mensaje consta de un texto, que describe la anomalía o evento sucedido, unas variables de contexto y un nivel de importancia. Los niveles de importancia, <em>debug, info, notice, warning, error, critical, alert, emergency</em>, se basan los declarados en el <a title="The Syslog Protocol [eng]" href="http://tools.ietf.org/html/rfc5424" target="_blank"><strong>RFC 5424</strong></a> que describe el formato de los mensajes de log empleado por grandes sistemas operativos como Linux.
+
+<!--more-->
+<h3>El Mensaje</h3>
+El mensaje es el texto que se almacena en el fichero, base de datos o el soporte que se crea necesario y describe la acción o evento sucedido. Todos los métodos que implementan la interfaz propuesta por PSR-3 admiten <em>string</em> u objetos que se puedan convertir a <em>string</em> mediante la implementación de la función mágica <em>__tostring()</em>.
+
+Las variables de contexto de cada mensaje son un conjunto de pares <em>clave-valor</em> que se pasan como array y cuya clave será buscada en el mensaje y reemplazada con el valor:
+<pre class="prettyprint">//...
+$contexto = array('nombreUsuario' =&gt; 'Symfony-user');
+$this-&gt;logger-&gt;info('El usuario {nombreUsuario} ha iniciado sesión', $context);</pre>
+Mediante la interpolación de los valores de contexto, en el mensaje final se tendrá el siguiente texto:
+
+<code class="prettyprint">El usuario Symfony-user ha iniciado sesión</code>
+
+El nombre de cada clave en el mensaje debe ir entre llaves y sin espacios en blanco en el interior. Los caracteres válidos van de <code>a-z</code>, <code>A-Z</code>, <code>_</code> y el <code>.</code>.
+
+<strong>Existe una clave especial llamada <em>exception</em> cuya misión es incluir un objeto de tipo Exception</strong> que serviría al logger para incluir detalles del error.
+
+Los niveles de importancia de cada mensaje los describo de menor a mayor importancia:
+<ul>
+	<li><span style="line-height: 13px;"><strong>debug</strong>: Información de debug de la aplicación. No usado en entornos de producción.</span></li>
+	<li><strong>info</strong>: Eventos interesantes como el inicio de sesión de usuarios.</li>
+	<li><strong>notice</strong>: Eventos normales pero significativos.</li>
+	<li><strong>warning</strong>: Ocurrencias excepcionales que no llegan a ser error.</li>
+	<li><strong>error</strong>: Errores de ejecución que permiten continuar con la ejecución de la aplicación pero que deben ser monitorizados.</li>
+	<li><strong>critical</strong>: Situaciones importantes donde se generan excepciones no esperadas o no hay disponible un componente.</li>
+	<li><strong>alert</strong>: Se deben tomar medidas inmediatamente. Se da en situaciones como la caída completa de la web, base de datos no disponible etc... En este caso, se suelen enviar mensajes por email.</li>
+	<li><strong>emergency</strong>: Es el error más grave e indica que todo el sistema está inutilizable.</li>
+</ul>
+Las funciones que un <em>logger</em> debería de implementar tienen el siguiente aspecto:
+<pre class="prettyprint">    public function emergency($message, array $context = array());
+    public function alert($message, array $context = array());
+    public function critical($message, array $context = array());
+    public function error($message, array $context = array());
+    public function warning($message, array $context = array());
+    public function notice($message, array $context = array());
+    public function info($message, array $context = array());
+
+    public function debug($message, array $context = array());
+
+    /**
+     * Esta es la función a la que llaman todas las anteriores
+     */
+    public function log($level, $message, array $context = array());</pre>
+<h3>Críticas al estándar</h3>
+Existen algunos autores como <a href="http://blog.stuartherbert.com/php/2012/12/29/personal-thoughts-on-the-psr-3-log-proposal/" target="_blank"><strong>Stuart Herbert’s</strong></a> que indican que los nombre de los métodos deberían empezar por un verbo para tener mejor legibilidad. Sería usar <code class="prettyprint">$this-&gt;log-&gt;<strong>log</strong>Emergency(...)</code> en lugar de <code class="prettyprint">$this-&gt;log-&gt;emergency(...)</code>. Además, la inclusión de las excepciones en una clave especial llamada <em>exception</em> no suena bien. Sería mejor pasarla como un parámetro opcional y no tener que distinguir este caso en la implementación del logger.
+
+&nbsp;
+
+Github: <strong><a title="PSR-3 logger interface" href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md" target="_blank">Documentación PSR-3</a></strong>

@@ -1,0 +1,129 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - Symfony
+tags:
+    - symfony2
+permalink: /guia-de-estilos-de-symfony2
+no_html_extension: true
+layout: post
+title: 'Guía de estilos de Symfony2'
+
+---
+<img class="alignnone size-full wp-image-62" alt="symfony2-logo" src="/assets/wp-content/uploads/2013/01/symfony2-logo.png" width="255" height="73" />La guía de estilos de Symfony2 describe la forma de escribir el código de <em>bundles</em> y proyectos basados en Symfony framework para hacerlo más conciso y predecible. Esto toma mayor importancia cuando realizamos <em>bundles</em> que distribuimos a terceros o queremos <a href="http://symfony.com/doc/current/contributing/index.html" target="_blank">contribuir a mejorar el núcleo del framework</a>. Las convenciones seguidas por Symfony siguen los estándar <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md" target="_blank">PSR-0</a>, <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md" target="_blank">PSR-1</a> y <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md" target="_blank">PSR-2</a> de PHP.
+
+<!--more-->
+<h3>Convenciones de la estructura del código</h3>
+<ul>
+	<li><span style="line-height: 13px;">Añade un <strong>espacio después de cada delimitador coma</strong> ','</span>
+<pre class="prettyprint">substr($dummy, 0, 5);</pre>
+</li>
+	<li>Añade un <strong>único espacio a ambos lados de un operador</strong>: =, ==, &amp;&amp; etc...
+<pre class="prettyprint">if($variable == true)</pre>
+<pre class="prettyprint"> $variable == true ? 'si' : 'no';</pre>
+</li>
+	<li>En los<strong> array multilínea, añade una coma al final de cada elemento</strong>, incluido el último:
+<pre class="prettyprint">$array = Array(
+    'elemento1' =&gt; 'valor1',
+    'elemento2' =&gt; 'valor2', // coma final
+);</pre>
+</li>
+	<li>Añade un <strong>salto de línea antes de una sentencia <em>return</em> a menos que el <em>return</em> se encuentre solo en un bloque de sentencias</strong>, como por ejemplo <em>if</em>:
+<pre class="prettyprint">class MiClase
+{
+    public function miFuncion()
+    {
+        $salida = false;
+                       // salto de línea
+        return $salida;
+    }
+}</pre>
+<pre class="prettyprint">class MiClase
+{
+    public function miFuncion()
+    {
+        $salida = false;
+
+        if($salida == true)
+        {
+            return $salida; // Solo en un bloque de sentencias {...}
+        }
+
+        return $salida;
+    }
+}</pre>
+</li>
+	<li>Usa las <strong>llaves para delimitar los bloques de código</strong>, con independencia del número de sentencias que contengan:
+<pre class="prettyprint">// Correcto:
+if(true)
+{
+    miFuncion();
+}
+
+// Mal:
+if(true)
+    miFuncion();</pre>
+</li>
+	<li><strong>Define una clase por archivo</strong>. Esto no tiene porque aplicarse a clases privadas auxiliares que solo se instancian desde una clase.</li>
+	<li>Las <strong>variables de una clase se declaran antes que los métodos</strong>.</li>
+	<li>Los <strong>métodos se declaran en el siguiente orden: <em>public</em>, <em>protected</em> y <em>private</em></strong>.</li>
+	<li>Usa <strong>paréntesis al instanciar las clases, independientemente del número de argumentos</strong>:
+<pre class="prettyprint">$a = new MiClase(); // Bien
+
+$a = new MiClase; // Mal</pre>
+</li>
+</ul>
+<h3>Convenciones de Nombres</h3>
+<ul>
+	<li>El <strong>nombre de las clases se realiza en <a href="http://es.wikipedia.org/wiki/CamelCase" target="_blank"><em>UpperCamelCase</em></a></strong>, es decir, que comienza por mayúscula.</li>
+	<li><span style="line-height: 13px;">Usa notación <a title="Escritura camelCase - Wikipedia" href="http://es.wikipedia.org/wiki/CamelCase" target="_blank"><em><strong>camelCase</strong></em></a> sin guiones bajos en <strong>variables, funciones, métodos y argumentos</strong>.</span></li>
+	<li>Usa el g<strong>uión bajo para los nombres de opciones, y nombres de parámetros</strong>.</li>
+	<li>Todas las clases deben llevar <em>namespace</em>.</li>
+	<li>Las <a title="Clase abstracta - PHP" href="http://php.net/manual/es/language.oop5.abstract.php" target="_blank"><em>clases abstractas</em></a> deben llevar el <strong>prefijo Abstract</strong>.</li>
+	<li>Las <a title="Interfaces - PHP" href="http://www.php.net/manual/es/language.oop5.interfaces.php" target="_blank"><em>interfaces</em></a> deben llevar el <strong>sufijo Interface</strong>.</li>
+	<li>Los <a title="Utilidades de los Traits de PHP" href="http://lennyvpg.wordpress.com/2012/12/29/herencia-multiple-en-php/" target="_blank"><em>traits</em></a> (PHP &gt;= 5.4) deben llevar el <strong>sufijo Trait</strong>.</li>
+	<li>Las <a title="Exceptiones - PHP" href="http://www.php.net/manual/es/language.exceptions.php" target="_blank"><em>excepciones</em></a> deben tener el <strong>sufijo Exception</strong>.</li>
+	<li>Los nombres de fichero usan caracteres alfanuméricos y guiones bajos.</li>
+</ul>
+<h3>Documentación del código</h3>
+<ul>
+	<li><span style="line-height: 13px;">Añade <a title="Documentación de PHPDoc [eng]" href="http://manual.phpdoc.org/HTMLSmartyConverter/HandS/phpDocumentor/tutorial_phpDocumentor.howto.pkg.html#basics.docblock" target="_blank"><em>PHPDoc blocks</em> </a>a todas las clases, funciones y métodos.</span></li>
+	<li>No usar la etiqueta <em>@return</em> si un método no devuelve nada.</li>
+	<li>No se deben usar las siguientes etiquetas: <em>@package</em> y <em>@subpackage</em>.</li>
+</ul>
+&nbsp;
+<h3>Convenciones para el Core de Symfony2</h3>
+Hasta ahora hemos descrito la guía de estilos para <em>bundles</em> y proyectos basados en Symfony2. A continuación, añadimos más convenciones para aquellos que se animen a colaborar con el desarrollo del <em>framework</em>:
+
+Para relacionar objetos existe una convención de nombres que nos facilita la comprensión de las relaciones. Cuando hay una relación 1:n, y esta relación se considera como principal se usan los siguientes nombres de métodos:
+<pre class="prettyprint">get()
+set()
+has()
+all()
+remove()
+clear()
+isEmpty()
+add()
+register()
+count()
+keys()</pre>
+El concepto de "relación principal" puede ser un poco confuso y lo mejor es da un ejemplo:
+un contenedor de <em>cookies</em> tiene muchos objetos <em>cookie</em>.
+
+En la <a href="http://symfony.com/doc/current/components/console/introduction.html#using-command-arguments" target="_blank">consola de Symfony2</a>, podemos crear un comando que recibirá argumentos y opciones. El objeto <em>input</em> que recibe el método <em>execute</em> no es una "relación principal" por lo que no se le aplica la convención anterior.  Para todas aquellas relaciones que no encajen en el caso anterior se emplean la siguiente convención de nombres:
+<pre class="prettyprint">getXXX()
+setXXX()  // Puede reemplazar o añadir un elemento.
+replaceXXX() // No puede añadir un nuevo elemento. Si no existe genera excepción.
+hasXXX()
+getXXXs()
+setXXXs() 
+removeXXX()
+clearXXX()
+isEmptyXXX()
+addXXX()
+registerXXX()
+countXXX()</pre>
+&nbsp;
+
+Documentación: <strong><a href="http://symfony.com/doc/current/contributing/code/standards.html" target="_blank">Conding standards</a></strong> | <strong><a href="http://symfony.com/doc/current/contributing/code/conventions.html" target="_blank">Convenciones del núcleo de Symfony</a></strong>

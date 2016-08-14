@@ -1,0 +1,28 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+    - Symfony
+tags: {  }
+permalink: /symfony-case-studies-youporn
+no_html_extension: true
+layout: post
+title: 'Symfony Case studies: Youporn'
+
+---
+<img class="alignnone size-full wp-image-62" alt="symfony2-logo" src="/assets/wp-content/uploads/2013/01/symfony2-logo.png" width="255" height="73" />Hoy <a title="Twitter de Fernando Siles" href="https://twitter.com/kalimero" target="_blank"><em>Fernando Siles</em></a> ha publicado un artículo en <a href="http://www.genbetadev.com/desarrollo-web/las-tripas-tecnologicas-de-un-gigante-del-porno" target="_blank">Genbetadev</a> en describiendo la arquitectura de de uno de los gigandes del streaming de vídeo de Internet: Youporn (la temática queda clara). El artículo de basa en una <a href="http://highscalability.com/blog/2012/4/2/youporn-targeting-200-million-views-a-day-and-beyond.html" target="_blank">publicación de <strong>High Scalability</strong></a> realizada con motivo de la charla dada por <a title="Perfil en Linkedin" href="http://www.linkedin.com/in/pickup22" target="_blank"><strong>Eric Pickup</strong>, CEO de Youporn</a> en la edición 2012 de la Confoo Conference.
+
+Como comprenderás, la temática de este sitio implica grandes cantidades en cualquier variable que se quiera medir (número de consultas, datos de transmisión, cantidad de log etc...) y lo interesante de todo esto es que está <strong>implementada en Symfony2</strong>.
+
+Las cifras son impresionantes:
+<ul>
+	<li><span style="line-height: 13px;">&gt; 300.000 consultas por segundo.</span></li>
+	<li>Transmite 100 Gb, lo que equivale a transmitir 3 DVDs completos por segundo.</li>
+	<li>Genera de 8GB-15GB en datos de logs por hora.</li>
+</ul>
+<!--more-->
+
+<strong>Esto no hace más que consolidar a Symfony2 como un framework apto para emplearse en situaciones extremas</strong> en donde se requieren respuestas rápidas para miles de usuarios de todo el mundo. Por supuesto, el éxito en la parte técnica de un servicio de estas dimensiones no solo está en el framework. La arquitectura del site incluye <strong><a href="http://redis.io/" target="_blank">Redis</a></strong> (NoSQL) en lugar del tradicional MySQL. <a href="http://haproxy.1wt.eu/" target="_blank"><strong>HAProxy</strong></a> como balanceador de carga. <strong><a href="https://www.varnish-cache.org/" target="_blank">Varnish</a> </strong>como proxy inverso para suavizar la carga en servidores web. <a href="http://www.balabit.com/network-security/syslog-ng/" target="_blank"><strong>Syslog-ng</strong></a> es el encargado de procesar los 15 GB/hora que puede llegar a generar.
+
+Originalmente, Youporn comenzó en 2006 escrito en <strong><a href="http://www.perl.org/" target="_blank">Perl</a> </strong>y usando MySQL. En 2011 se reescribió el código por completo y se paso a usar PHP + Symfony obteniendo una mejoría del 10% y un código más legible.

@@ -1,0 +1,38 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags: {  }
+permalink: /php-rfc-importar-namespaces-de-funciones
+no_html_extension: true
+layout: post
+title: 'PHP-RFC: Importar namespaces de funciones'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" />El pasado Junio, <a href="https://igor.io/" target="_blank">Igor Wiedler</a>, desarrollador muy activo del proyecto Silex, propuso un interesante <a title="PHP RFC" href="https://wiki.php.net/rfc/use_function" target="_blank">RFC -<em>Importing namespaced functions</em>- </a>para mejorar la forma en la que se trabaja con funciones envueltas en namespaces y equipararla a las facilidades que existen para importar namespaces de clases, interfaces y traits.
+
+Desde que en <a title="Namespaces en PHP" href="http://www.php.net/manual/es/language.namespaces.rationale.php" target="_blank">PHP &gt;=5.3 aparecieran los namespaces</a>, el operador <em><strong>use</strong></em> se ha utilizado para importar namespaces y hacer más cortas las referencias a las clases. Además de las clases, las funciones pueden organizarse en namespaces de la siguiente manera:
+<pre class="prettyprint">namespace Yosymfony\funciones {
+    function nop() {
+        return 'nop';
+    }
+
+    function refNop() {
+        /**
+         * Solo las funciones dentro de un mismo namespace se
+         * pueden llamar sin el nombre cualificado
+         */
+        return nop();
+    }
+}</pre>
+<!--more-->
+El problema surge cuando se intenta invocar las funciones desde otro namespace, por ejemplo, el global:
+<pre class="prettyprint">use Yosymfony\Funciones as Helper; // Importamos el namespace
+
+namespace {
+    Helper\nop();  // ...pero no es igual que con clases
+}</pre>
+Aunque importemos el namespace, siempre está presente al hacer referencia a la función mediante el alias 'Helper'. Lo ideal sería importar el espacio de nombre y usar la función sin ningún tipo de alias. Para ello, el RFC propone crear un nuevo operador denominado <em><strong>use function</strong></em> que permitirá importar namespaces de funciones sin realizar un sobrecarga sobre el actual <strong>use</strong>. Además, la inclusión de este nuevo operador evitaría el <a title="PHP fallback" href="http://www.php.net/manual/es/language.namespaces.fallback.php" target="_blank"><strong>fallback de funciones</strong></a>, de manera que si una función no se puede resolver en el namespace actual, no intente buscarla en el global.
+
+Sin duda, de aprobarse este RFC, hay que tener paciencia pues se encuentra en estado de draft y estos procesos pueden ser muy lentos, muchas librerías y pequeños proyectos se beneficiarían de esta nueva característica del lenguaje.

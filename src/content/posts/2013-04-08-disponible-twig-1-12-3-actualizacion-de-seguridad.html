@@ -1,0 +1,45 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - Symfony
+tags:
+    - seguridad
+    - twig
+permalink: /disponible-twig-1-12-3-actualizacion-de-seguridad
+no_html_extension: true
+layout: post
+title: 'Disponible Twig 1.12.3: actualización de seguridad'
+
+---
+<img class="alignnone size-full wp-image-275" alt="twig-logo" src="/assets/wp-content/uploads/2013/04/twig-logo.png" width="69" height="75" />Hoy el equipo de desarrollo de Twig, el motor de plantillas de Symfony2, ha publicado la <a title="Twig 1.12.3" href="http://blog.twig.sensiolabs.org/post/47461911874/security-release-twig-1-12-3-released" target="_blank"><strong>versión 1.12.3 con motivo de una actualización de seguridad</strong></a> para la corrección del bug encontrado por <a href="https://github.com/fabpot/Twig/pull/1026" target="_blank"><strong>Rick Prent</strong></a>. El bug se encuentra en la función <code class="prettyprint"><a href="http://twig.sensiolabs.org/api/master/Twig_Loader_Filesystem.html" target="_blank">Twig_Loader_Filesystem</a>,</code> encargada de cargar plantillas del sistema de ficheros, a la que se le podía forzar a cargar plantillas de un directorio para el que no estaba configurado. <strong>Todas las versiones de Twig están afectadas</strong> por lo que es muy recomendable actualizar.
+
+<strong>Si por algún motivo no puedes actualizar a la última versión, estos son los cambios manuales que hay que realizar</strong>:
+<pre class="prettyprint">diff --git a/lib/Twig/Loader/Filesystem.php b/lib/Twig/Loader/Filesystem.php
+index faf27e3..84a5e03 100644
+--- a/lib/Twig/Loader/Filesystem.php
++++ b/lib/Twig/Loader/Filesystem.php
+@@ -203,6 +203,7 @@ protected function validateName($name)
+             throw new Twig_Error_Loader('A template name cannot contain NUL bytes.');
+         }
+
++        $name = ltrim($name, '/');
+         $parts = explode('/', $name);
+         $level = 0;
+         foreach ($parts as $part) {
+diff --git a/test/Twig/Tests/Loader/FilesystemTest.php b/test/Twig/Tests/Loader/FilesystemTest.php
+index 9ea2d0e..798e994 100644
+--- a/test/Twig/Tests/Loader/FilesystemTest.php
++++ b/test/Twig/Tests/Loader/FilesystemTest.php
+@@ -47,6 +47,7 @@ public function getSecurityTests()
+             array('filters\\..\\..\\AutoloaderTest.php'),
+             array('filters\\\\..\\\\..\\\\AutoloaderTest.php'),
+             array('filters\\//../\\/\\..\\AutoloaderTest.php'),
++            array('/../AutoloaderTest.php'),
+         );
+     }</pre>
+&nbsp;
+
+Twig: <a href=" http://twig.sensiolabs.org/" target="_blank"><strong>Obtener última versión</strong></a>.
+
+Test de vulnerabilidades: <a title="Comprueba las vulnerabilidades de las dependencias de tu proyecto" href="https://security.sensiolabs.org/" target="_blank"><strong>Security Advisories Checker</strong></a>.

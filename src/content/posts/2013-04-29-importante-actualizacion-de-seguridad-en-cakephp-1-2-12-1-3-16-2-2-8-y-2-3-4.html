@@ -1,0 +1,19 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - cakephp
+    - seguridad
+permalink: /importante-actualizacion-de-seguridad-en-cakephp-1-2-12-1-3-16-2-2-8-y-2-3-4
+no_html_extension: true
+layout: post
+title: 'Importante actualización de seguridad en CakePHP 1.2.12, 1.3.16, 2.2.8 y 2.3.4'
+
+---
+<img class="alignnone size-full wp-image-81" alt="CakePHP-logo" src="/assets/wp-content/uploads/2013/01/cakephp-logo.png" width="93" height="87" />Importante actualización de seguridad relacionada con la gestión y ordenación de los resultados usados en el componente <a title="CakePHP PaginatorComponent" href="http://api.cakephp.org/2.3/class-PaginatorComponent.html" target="_blank"><strong><em>PaginatorComponent</em></strong></a>, encargado de paginar los resultados del modelo de datos. El problema se produce cuando se realiza una <a href="http://api.cakephp.org/2.3/class-PaginatorComponent.html#_paginate" target="_blank">paginación</a> sin indicar los campos por los que está permitido ordenar los resultados (opción <em>whitelist</em>). La vulnerabilidad permite la ejecución de código SQL. <strong>Por el momento, el equipo de CakePHP no ha hecho pública la forma de explotar esta vulnerabilidad</strong>. Se pretende dar un tiempo razonable para que los usuarios realicen actualizaciones. Las versiones afectadas son <strong>1.2.12, 1.3.16, 2.2.8 y 2.3.4</strong>. Recuerda que el parámetro <em>whitelist</em> es muy útil para evitar realizar ordenaciones de los resultados por campos que no se encuentren indexados en base de datos. Además, cada versión lleva algunas mejoras, tal y como se detalla en <a href="http://bakery.cakephp.org/articles/markstory/2013/04/28/security_release_-_cakephp_1_2_12_1_3_16_2_2_8_and_2_3_4" target="_blank">The Bakery</a>.
+
+GitHub: <a title="GitHub" href="http://github.com/cakephp/cakephp/tags" target="_blank"><strong>Descargar actualización</strong></a>.
+
+CakePHP: <a title="CakePHP changelogs" href="http://cakephp.org/changelogs" target="_blank"><strong>ChageLogs</strong></a>.

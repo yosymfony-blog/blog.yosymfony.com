@@ -1,0 +1,47 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - Symfony
+tags:
+    - drupal
+    - 'laravel 4'
+    - magento
+    - phpbb
+    - symfony2
+permalink: /symfony2-en-el-corazon-de-otros-framework
+no_html_extension: true
+layout: post
+title: 'Symfony2 en el corazón de otros framework'
+
+---
+<img class="alignnone size-full wp-image-62" alt="symfony2-logo" src="/assets/wp-content/uploads/2013/01/symfony2-logo.png" width="255" height="73" />Como programador y entusiasta de Symfony, me encanta ver como crece este proyecto tanto en características como en comunidad. Una de las mejores decisiones que han tomado los desarrolladores de Symfony es la de separar y desacoplar los componentes de forma que puedan ser reutilizados individualmente en otros proyectos fuera de Symfony. Gracias a ello disponemos de <strong>componentes de gran calidad</strong>, hace lo que se espera de ellos y de forma correcta, <strong>con una comunidad de programadores grande que ayuda a mantenerlos</strong>.
+
+<strong>"Don't reinventing the wheel"</strong> es un principio muy importante que nos dice que si algo existe y funciona, hay que reutilizarlo. Es precisamente el razonamiento que ha llevado a grandes proyectos como <a href="http://drupal.org" target="_blank"><strong>Drupal</strong></a> o <a href="https://www.phpbb.com/" target="_blank"><strong>PhpBB</strong></a> y a otros framework como <a title="Laravel framework" href="http://laravel.com/" target="_blank"><strong>Laravel</strong></a> a incluir algunas partes de Symfony2 como parte de su <em>core</em>.
+
+<!--more-->
+<h3>PhpBB</h3>
+PhpBB es uno de las aplicaciones <a title="Estadísticas de uso de PhpBB - w3techs" href="http://w3techs.com/technologies/details/cm-phpbb/all/all" target="_blank">más extendidas para crear foros</a>. Actualmente se encuentra en la versión 3.x y para la versión 4 se tiene intención de implementar parte de los componentes de Symfony2 tal como se propone en el <a title="RFC Symfony2 en PhpBB" href="https://wiki.phpbb.com/PhpBB4/RFC/Symfony_2" target="_blank"><strong>RFC</strong></a>. Las razones por las que adoptan Symfony2:
+<ul>
+	<li><span style="line-height: 13px;">PhpBB 4 busca usar como mínomo PHP 5.3. Symfony ha sido reescrito para usar esta versión como mínimo.</span></li>
+	<li>Soporte para la <a title="Class Loader - Symfony2" href="http://symfony.com/doc/current/components/class_loader.html" target="_blank">carga automática de clases</a>.</li>
+	<li>Symfony2 es un framework con una arquitectura clara y módulos desacoplados.</li>
+	<li>Reutilizar componentes como la caché o el logger.</li>
+	<li>El <a title="Dependency Injection - Symfony2" href="http://symfony.com/doc/current/components/dependency_injection/introduction.html" target="_blank">Inyector de Dependencias</a> es un componente esencial para desacoplar y tener una buena organización de los objetos.</li>
+</ul>
+Actualmente, el <a href="https://wiki.phpbb.com/PhpBB4/RFC" target="_blank"><strong>RFC ha sido aceptado</strong></a>. No te pierdas el vídeo de <strong>Fabien Potencier titulado "<a href="http://www.youtube.com/watch?v=VuNFof59A7M" target="_blank">PhpBB4 meets Symfony2</a>" </strong>presentado en Noviembre de 2010.
+<h3>Drupal</h3>
+<strong>Drupal</strong> es junto con <strong><a href="http://www.joomla.org/" target="_blank">Joomla</a></strong>, el <a title="Uso de los CMS en Internet" href="http://w3techs.com/technologies/overview/content_management/all" target="_blank">CMS de propósito general más usado de Internet</a>. La versión 8 se encuentra actualmente en desarrollo y es en esta en la que se va a comenzar a usar componentes de Symfony2:
+<ul>
+	<li><span style="line-height: 13px;"><strong>HttpFoundation, HttpKernel</strong> y <strong><strong>ClassLoader</strong></strong> han sido los <a href="http://groups.drupal.org/node/185724" target="_blank">primeros componentes en ser integrados</a>. Gracias al los dos primeros, Drupal podrá hacer frente a la <em><a href="http://groups.drupal.org/wscci" target="_blank">Web Services and Context Core Initiative</a></em>, que pretende proporcionar una API REST para que Drupal y los contenidos sean facilmente integrables.
+</span></li>
+	<li><strong>Inyector de dependencias</strong> permitirá tener clases desacopladas.</li>
+	<li>El <strong>gestor de eventos de Symfony2</strong> -<em>EventDispatcher</em>- inicialmente <a href="http://drupal.org/node/1509164">convivirá con el sistema actual -<em>system hook</em>- hasta Drupal 9</a>. En Drupal 8 <em>EventDispatcher</em> tomará el control en los principales componentes del <em>core</em>.</li>
+	<li>El <strong>motor de plantillas Twig</strong> estará incorporado en la versión 8.</li>
+	<li>Para almacenar configuraciones, Drupal 8 opta por usar el <strong>formato <a title="Formato YAML" href="http://www.yaml.org/" target="_blank">YAML</a></strong> y para procesarlo utilizará el componente que incorpora Symfony2. El uso de este formato es promovido por la<a href="http://groups.drupal.org/build-systems-change-management/cmi" target="_blank"><em> Config Management Initiative</em></a>.</li>
+</ul>
+Si quieres ayudar a crear la versión 8 de Drupal, <a href="http://drupal.org/community-initiatives/drupal-core" target="_blank">únete a la comunidad</a>.
+<h3>Laravel 4</h3>
+<strong>Laravel</strong> es un framework muy joven, lo lanzó <a title="Cuenta Twitter de Taylor Otwell, creador de Laravel" href="https://twitter.com/taylorotwell" target="_blank">Taylor Otwell</a> en Abril de 2011, que nació con el objetivo de realizar desarrollo con elegancia y manteniendo las cosas lo más simples posibles. Como parte de su core, <strong><a href="https://github.com/laravel/laravel/tree/master/laravel/vendor/Symfony/Component" target="_blank">Laravel incorpora el HttpFoundation y el componente Console de Symfony2</a></strong>. Console permite desarrollar potentes aplicaciones de línea de comandos dejando de lado las dificultades, como por ejemplo,  saber el estado en el que quedó la ejecución de un comando.
+<h3>Magento</h3>
+<strong>Desde la próxima versión 2 de Magento</strong>, una de las aplicaciones líderes en la creación de tiendas online, incorporará soporte para el motor de plantillas <a href="http://twig.sensiolabs.org/" target="_blank"><strong>Twig</strong></a> de Symfony2, <strong><a title="Magento soporta plantillas Twig" href="https://github.com/magento/magento2/commit/3440eaef1268e0ea556ba8e3737cdd2ddf48c449" target="_blank">tal y como se indica en este commit</a>.</strong> El soporte incluye funciones y filters propias de Magento.

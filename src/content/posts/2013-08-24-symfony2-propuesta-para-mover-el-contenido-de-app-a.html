@@ -1,0 +1,38 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - Symfony
+tags:
+    - symfony2
+permalink: /symfony2-propuesta-para-mover-el-contenido-de-app-a
+no_html_extension: true
+layout: post
+title: 'Symfony2: Propuesta para mover el contenido de /app a /'
+
+---
+<img class="alignnone size-full wp-image-62" alt="symfony2-logo" src="/assets/wp-content/uploads/2013/01/symfony2-logo.png" width="255" height="73" />A principios de semana <a title="Cuenta en GitHub" href="https://github.com/bschussek" target="_blank">Bernhard Schussek</a>, desarrollador muy activo de la comunidad Symfony, propuso la idea de mover el fichero de configuración de PHPUnit -<em>phpunit.xml.dist</em>- al directorio raíz del proyecto para evitar tener que incluir la opción <code class="prettyprint">-c app</code> cada vez que se lanzan las pruebas. Aunque implicitamente no estaba en la petición original, la idea no es solo mover este fichero sino que es necesario analizar si realmente el contenido de <code class="prettyprint">/app</code> debería estar en el directorio raiz. <a title="Comentario en GitHub" href="https://github.com/symfony/symfony-standard/issues/584#issuecomment-23121825" target="_blank"><strong>Fabien Potencier propuso la siguiente estructura</strong></a> para la versión estándar de Symfony2:
+
+<!--more-->
+<pre class="prettyprint">├── cache
+├── composer.json
+├── composer.lock
+├── console
+├── logs
+├── phpunit.xml.dist
+├── src
+│   ├── Acme
+│   ├── AppCache.php
+│   ├── AppKernel.php
+│   ├── Resources
+│       ├── config
+│       └── views
+│   ├── SymfonyRequirements.php
+│   ├── autoload.php
+│   ├── bootstrap.php.cache
+│   └── check.php
+├── vendor
+└── web</pre>
+<strong>La estructura no es definitiva</strong> y se están planteando muchas opciones. Pensando en los administradores de sistemas, me parece correcto llevar al raiz los directorios de <code class="prettyprint">logs</code> y <code class="prettyprint">cache</code>.
+
+Ahora que la primera LTS está lanzada, creo que es un buen momento para plantearse la estructura de proyectos en futuras versiones del framework. Si quieres estar al día sobre este tema, lo mejor es que te pases por <a title="Issue en GitHub" href="https://github.com/symfony/symfony-standard/issues/584" target="_blank"><strong>GitHub</strong></a>.

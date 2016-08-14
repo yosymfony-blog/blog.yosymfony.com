@@ -1,0 +1,27 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - cakephp
+permalink: /disponible-cakephp-2-3-0
+no_html_extension: true
+layout: post
+title: 'Disponible CakePHP 2.3.0'
+
+---
+<img class="alignnone size-full wp-image-81" alt="CakePHP-logo" src="/assets/wp-content/uploads/2013/01/cakephp-logo.png" width="93" height="87" />Ya está disponible la última versión de <a title="Descargar CakePHP" href="https://github.com/cakephp/cakephp/tags" target="_blank"><strong>CakePHP, 2.3.0</strong></a> y la sexta revisión de la rama 2.2. Para el que no conozca CakePHP, decir que es un framework que permite el desarrollo ágil de aplicaciones web en PHP. Desde el blog de la aplicación se asegura que la 2.3.0 es totalmente compatible con la anterior 2.5 aunque, antes de aventurarte a actualizar, es recomendable leer la <a title="Guía de migración a CakePHP 2.3.0 [eng]" href="http://book.cakephp.org/2.0/en/appendices/2-3-migration-guide.html" target="_blank">guía de migración hacia la nueva versión</a>.
+
+Respecto a las novedades de la nueva versión, el componete <a title="Documentación del componente [eng]" href="http://api.cakephp.org/class/auth-component" target="_blank"><em>AuthComponent</em></a> ha mejorado los mecanismos de autenticación <em>stateless</em>, es decir, aquellos que no emplean mecanismos tales como las <em>cookies</em>. Ahora responde con un código de error en lugar de realizar una redirección. Además se ha añadido soporte al algoritmo <em><a title="Algoritmo Bcrypt [eng] - Wikipedia" href="http://en.wikipedia.org/wiki/Bcrypt" target="_blank">BCrypt</a></em> para cifrar las claves de los usuarios.
+
+El paginador de resultados ha cambiado y con la versión 2.3.0 se genera una excepció <em>NotFoundException</em> si el número de página solicitado se sale de rango.
+
+Otros cambios destacados han sido el soporte a <em><a title="Transport Layer Security - Wikipedia" href="http://es.wikipedia.org/wiki/Transport_Layer_Security" target="_blank">TLS</a></em> en <a title="Documentación del componente [eng]" href="http://api.cakephp.org/class/http-socket" target="_blank"><em>CakeSocket</em></a> por lo que se permite el envío de email seguros usando <em>SMTP</em> con <em>TLS</em>.
+
+Por el momento CakePHP 2.3.0 puede correr en PHP 5.2, pero, como dicen ellos, te perderás futuras funcionalidades.
+
+&nbsp;
+
+Lista de <a href="http://bakery.cakephp.org/articles/lorenzo/2013/01/28/cakephp_2_3_0_is_out" target="_blank">novedades de CakePHP 2.3.0 + revisiones de 2.2.6</a>
+<strong>Via</strong>: <a href="http://bakery.cakephp.org/" target="_blank">Blog CakePHP</a>

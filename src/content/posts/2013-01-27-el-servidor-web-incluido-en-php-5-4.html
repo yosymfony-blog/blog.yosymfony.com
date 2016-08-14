@@ -1,0 +1,45 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - 'servidor web embebido'
+permalink: /el-servidor-web-incluido-en-php-5-4
+no_html_extension: true
+layout: post
+title: 'El servidor web incluido en PHP 5.4'
+
+---
+<a href="/assets/wp-content/uploads/2013/01/php-logo.png"><img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" /></a>Entre las muchas mejoras que introdujo <strong>PHP 5.4</strong>, una de ellas fue la inclusión de serie de un servidor web embebido al estilo <em><a title="Python SimpleHttpServer - eng" href="http://docs.python.org/2/library/simplehttpserver.html" target="_blank">Python built in server</a></em>. <strong>La intención es permitir realizar pruebas de nuestros proyectos y no es apto para entornos de producción</strong>. El servidor resuelve las peticiones de forma secuencial y es posible indicar el <em>root document</em> o directorio de trabajo. Además, también podemos proporcionar un script que hará de enrutador para las peticiones.
+
+La forma más sencilla de iniciar el servidor es la siguiente <span class="muted">(desde la consola)</span>:
+
+<code class="prettyprint">$ php -S localhost:8000</code>
+
+<!--more-->El comando anterior levanta el servidor en el puerto 8000 y toma como <em>root document</em> el directorio actual:
+<pre class="prettyprint">PHP 5.4.11 Servidor de desarrollo iniciado en Domingo Enero 27 12:27:01 2013
+Escuchando en localhost:8000
+La raíz de documentos es /var/www-interno
+Presione Ctrl-C para salir</pre>
+Si queremos usar otro directorio de trabajo debemos añadir la opción <em>-t</em>:
+
+<code class="prettyprint">$ php -S localhost:8000 -t /home/yosymfony/html-publico</code>
+
+El servidor es capaz de devolver el <a title="MIME type - Wikipedia" href="http://es.wikipedia.org/wiki/Multipurpose_Internet_Mail_Extensions" target="_blank"><em>MIME type</em> </a>adecuado para los siguientes recursos: .css, .gif, .htm, .html, .jpe, .jpeg, .jpg, .js, .png, .svg, y .txt. <strong>Desde la versión 5.4.4 en adelante también soporta .htm y .svg</strong>. Si quisieramos agregar un nuevo tipo no soportado, usaríamos un script enrutador que se lanza con cada petición:
+<pre class="prettyprint">// router.php
+$path = pathinfo($_SERVER["SCRIPT_FILENAME"]);
+if ($path["extension"] == "ogg") {
+    header("Content-Type: video/ogg");
+    readfile($_SERVER["SCRIPT_FILENAME"]); // Se devuelve el contenido del fichero
+}
+else {
+    return FALSE; // Continúa resolviéndose la petición
+}</pre>
+Y ahora solo queda levantar el servidor con los nuevos parámetros:
+
+<code class="prettyprint">$ php -S localhost:8000 -t /home/yosymfony/html-publico router.php</code>
+
+&nbsp;
+
+<strong>Más información</strong>: <a title="Documentación de PHP" href="http://php.net/manual/es/features.commandline.webserver.php" target="_blank">Servidor web embebido en PHP</a>

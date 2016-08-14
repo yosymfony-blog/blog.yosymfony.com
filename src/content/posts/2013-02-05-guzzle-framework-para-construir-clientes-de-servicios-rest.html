@@ -1,0 +1,78 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - api
+    - guzzlephp
+    - rest
+permalink: /guzzle-framework-para-construir-clientes-de-servicios-rest
+no_html_extension: true
+layout: post
+title: 'Guzzle: framework para construir clientes de servicios REST'
+
+---
+<img class="alignnone size-full wp-image-106" style="margin: 5px;" alt="guzzle-logo" src="/assets/wp-content/uploads/2013/02/guzzle-logo.png" width="91" height="103" /><a href="http://guzzlephp.org/" target="_blank"><strong>Guzzle</strong></a> es un  framework que no permite crear, con pocas líneas de código, un cliente capaz de consumir <a title="REST - Wikipedia" href="http://es.wikipedia.org/wiki/Representational_State_Transfer" target="_blank">servicios REST</a> como los de Twitter, GitHub o Facebook. Guzzle emplea la librería <a title="cURL para PHP" href="http://php.net/manual/es/book.curl.php" target="_blank"><strong>cURL</strong></a> para realizar las peticiones HTTP a los servicios y provee un <em>sencillo sistema de descripción de servicios</em> que documentan y detallan los métodos que podrá usar el cliente. Guzzle permite usar cualquier verbo del protocolo HTTP: GET, POST, DELETE... y dispone de mecanismos de <a title="Cache de respuestas HTTP de Guzzle" href="http://guzzlephp.org/guide/http/caching.html" target="_blank"><strong>caché de respuestas</strong></a> y de realización de<strong> <a href="http://guzzlephp.org/guide/batching.html" target="_blank">consultas en paralelo y batch</a></strong>.
+
+<!--more-->
+
+La facilidad de uso de Guzzle se ve en ejemplos como este en el que se escribe un pequeño cliente para Twitter:
+<pre class="prettyprint">// Endpoint de la API de Twitter
+$client = new Client('https://api.twitter.com/{version}', array(
+    'version' =&gt; '1.1'
+));
+
+// Usamos el protocolo oAuth para firmar las peticiones mediante OauthPlugin con
+// los datos que nos proporciona Twitter
+$client-&gt;addSubscriber(new Guzzle\Plugin\Oauth\OauthPlugin(array(
+    'consumer_key'    =&gt; 'tu consumer_key',
+    'consumer_secret' =&gt; 'tu consumer_secret',
+    'token'           =&gt; 'tu token',
+    'token_secret'    =&gt; 'tu token_secret'
+)));
+
+// Devolvemos los últimos twits del usuario (<a title="Método statuses/user_timeline de la API de Twitter" href="https://dev.twitter.com/docs/api/1/get/statuses/user_timeline" target="_blank">Doc API Twitter</a>)
+echo $client-&gt;get('statuses/user_timeline.json')-&gt;send()-&gt;getBody();</pre>
+La descripción de los servicios es un punto muy importante de esta librería ya que de una sola vez, documentamos y establecemos los tipos de datos que conforma el resultado de cada método. Los servicios se pueden describir mediante arrays PHP o usando JSON. Recomiendo esta última ya que me parece más legible.
+<pre class="prettyprint">{
+    "name": "API ejemplo",
+    "apiVersion": "2013-02-05",
+    "baseUrl": "http://api.ejemplo.es",
+    "description": "Descripción de la API",
+    "operations": {
+        "GetUsers": {
+            "httpMethod": "GET",
+            "uri": "/users",
+            "summary": "Obtiene la lista de usuarios",
+            "responseClass": "GetUsersOutput"
+        },
+
+    },
+    "models": {
+        "GetUsersOutput": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "location": "json",
+                        "type": "string"
+                    },
+                    "age": {
+                        "location": "json",
+                        "type": "integer"
+                    }
+                }
+            }
+        }
+    }
+}</pre>
+Cómo ves el JSON es bastante descriptivo y a cada método le indicamos el modelo de datos que esperamos como respuesta mediante el atributo <em>models</em>. Tras esto solo queda asociarla a nuestro cliente y estaremos en disposición de consumir sus métodos:
+<pre class="prettyprint">use Guzzle\Service\Description\ServiceDescription;
+
+$description = ServiceDescription::factory('/path/to/descripcion-servicio.json');
+$client-&gt;setDescription($description);</pre>
+&nbsp;
+
+Código fuente: <strong><a title="Código fuente GuzzlePHP - Github" href="https://github.com/guzzle/guzzle" target="_blank">Github</a></strong>.

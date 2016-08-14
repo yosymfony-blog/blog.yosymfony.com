@@ -1,0 +1,62 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - 'php 5.5'
+permalink: /php-5-5-la-constante-class
+no_html_extension: true
+layout: post
+title: 'PHP 5.5: la constante CLASS'
+
+---
+<img class="alignnone size-full wp-image-51" alt="php-logo" src="/assets/wp-content/uploads/2013/01/php-logo.png" width="123" height="74" /><a href="http://php.net/ChangeLog-5.php#5.5.0" target="_blank"><strong>CLASS</strong></a> es una nueva constante disponible a nivel de clase en PHP &gt;= 5.5.0. Se trata de una constante que posee el nombre cualificado (namespace+nombre de clase) de ella y que, <em>a priori</em>, representa una mejora en los <em>test doubles</em> -aquellos en los que usamos mocking y stub para simular el comportamiento de una clase en los unit tests-.
+<pre class="prettyprint">namespace Yosymfony;
+
+class Clase1 {
+}
+
+echo Clase1::class;  //resultado: Yosymfony\Clase1</pre>
+<!--more-->
+
+El resultado anterior podríamos haberlo obtenido mediante <code class="prettyprint">__NAMESPACE__ . '/ClassName'</code>, pero tiene el inconveniente de que <a title="PHP __NAMESPACE__" href="http://www.php.net/manual/es/language.namespaces.nsconstants.php" target="_blank"><strong>__NAMESPACE__ contiene el espacio de nombre actual</strong></a>. Uno de los principales usos vendrá cuando necesitemos crear mocks en los test unitarios:
+<pre class="prettyprint">//Sin CLASS:
+use Yosymfony\Clase1;
+
+class Clase1Test extends PHPUnit_Framework_TestCase
+{
+    public function testClase1ConClase2()
+    {
+        $c2 = $this-&gt;getMock('Yosymfony\Clase2'); // nombre cualificado
+
+        $c1 = new Clase1;
+        $c1-&gt;setClase2($c2);
+
+        // ...
+    }
+}</pre>
+Con la nueva constante es mucho más cómodo:
+<pre class="prettyprint">//Con CLASS:
+use Yosymfony\Clase1;
+use Yosymfony\Clase2;
+
+class Clase1Test extends PHPUnit_Framework_TestCase
+{
+    public function testClase1ConClase2()
+    {
+        $c2 = $this-&gt;getMock(Clase2::ClASS);
+
+        $c1 = new Clase1;
+        $c1-&gt;setClase2($c2);
+
+        // ...
+    }
+}</pre>
+&nbsp;
+
+PHP: <a href="http://www.php.net/manual/es/language.namespaces.nsconstants.php" target="_blank"><strong>La constante __NAMESPACE__</strong></a>.
+
+PHP: <a href="http://php.net/ChangeLog-5.php#5.5.0" target="_blank"><strong>5.5.0 changelog</strong></a>.
+
+PHP: <a href="http://php.net/manual/en/reserved.constants.php" target="_blank"><strong>Constantes predefinidas del lenguaje</strong></a>.

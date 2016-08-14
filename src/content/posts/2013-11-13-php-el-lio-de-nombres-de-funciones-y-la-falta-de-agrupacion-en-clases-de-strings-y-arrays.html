@@ -1,0 +1,20 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags: {  }
+permalink: /php-el-lio-de-nombres-de-funciones-y-la-falta-de-agrupacion-en-clases-de-strings-y-arrays
+no_html_extension: true
+layout: post
+title: 'PHP: el lío de nombres de funciones y la falta de agrupación en clases de strings y arrays'
+thumb_img: php.png
+---
+PHP tiene ya 18 años de antigüedad. La primera implementación orientada a objetos llegó con la versión 4 -año 2000-, y corría bajo el motor Zend Engine 1.0, para más señas. Tras todo este tiempo, hoy en día sigue manteniendo una convención de nombres confusa y una falta de organización en clases de funciones como las de <a title="Funciones para manipular strings en PHP" href="http://php.net/manual/en/ref.strings.php" target="_blank"><em>strings</em></a> o las que manipulan <a title="Funciones para manipular arrays en PHP" href="http://php.net/manual/en/ref.array.php" target="_blank"><em>arrays</em></a>.
+<pre class="prettyprint">// Algunos ejemplos de string:
+str_pad() // prefijo str_
+stripos() // prefijo str
+trim() // sin prefijo</pre>
+Con la gestión de arrays ocurre algo similar, aunque es menos llamativo porque el prefijo mayoritario es "array_". Existe un amplio conjunto de funciones que nos permiten hacer casi de todo pero de nuevo existen algunas funciones que no usan prefijo como el caso de las que ordenan: <a href="http://www.php.net/manual/en/function.sort.php" target="_blank">sort()</a>, <a href="http://www.php.net/manual/en/function.uasort.php" target="_blank">uasort()</a>.
+
+String y arrays son tipos de dato primitivo que debería evolucionar a una verdadera implementación orientada a objetos en el que el propio tipo de dato tenga métodos asociados. Además, sería muy aconsejable seguir una convención de nombres porque facilitaría el aprendizaje del lenguaje. Las convenciones lo haría más previsible y por tanto más fácil.

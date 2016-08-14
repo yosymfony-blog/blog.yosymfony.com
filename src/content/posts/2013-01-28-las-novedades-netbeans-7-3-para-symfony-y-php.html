@@ -1,0 +1,46 @@
+---
+author: victor
+excerpt: ''
+categories:
+    - PHP
+tags:
+    - composer
+    - netbeans
+    - symfony2
+    - twig
+permalink: /las-novedades-netbeans-7-3-para-symfony-y-php
+no_html_extension: true
+layout: post
+title: 'Las novedades NetBeans 7.3 para Symfony y PHP'
+
+---
+<img class="alignnone size-full wp-image-74" alt="netbeans-logo" src="/assets/wp-content/uploads/2013/01/netbeans-logo.png" width="227" height="68" />Hoy ha visto la luz la <a title="NetBeans IDE 7.3 Release Candidate 1" href="http://netbeans.org/community/releases/73/" target="_blank">primera versión candidata a versión final de NetBeans 7.3</a> con interesantes novedades como el soporte para los <em>namepaces</em> en las anotaciones de Symfony2 y Doctrine. A continuación resalto algunas:
+<h3>Twig</h3>
+<a href="https://blogs.oracle.com/netbeansphp/entry/another_twig_improvements" target="_blank">Soporte a </a><strong><a href="https://blogs.oracle.com/netbeansphp/entry/another_twig_improvements" target="_blank"><em>code templates</em> de Twig</a>.</strong> Los <em>code templates</em> o <em>snippet</em> son porciones de código que funcionan a modo de plantilla al escribir sentencias.
+
+<a href="https://blogs.oracle.com/netbeansphp/entry/twig_code_completion" target="_blank"><strong><em>Code completion</em> del código de la plantilla</strong></a> donde en todo momento te muestra sugerencias de la sentencia que tienes intención de teclear y la documentación asociada.
+
+<strong>Sintaxis coloreada para las <a title="String Interpolation de Twig - eng" href="http://twig.sensiolabs.org/doc/templates.html#string-interpolation" target="_blank"><em>String Interpolation</em> de Twig 1.5</a></strong>. Las <em>String Interpalation</em> son un nuevo mecanismo que permite evaluar una expresión dentro de una cadena de texto: <code class="prettyprint">{ "texto #{expresión}" }</code>  al renderizar una plantilla. Ejemplo: <code class="prettyprint">{ "La suma es #{1 + 1}" unidades }</code>.
+
+<!--more-->
+<h3>Soporte a Composer</h3>
+El nuevo NetBeans tiene <a href="https://blogs.oracle.com/netbeansphp/entry/composer_support" target="_blank">soporte para Composer</a>. Si no conoces <a title="Introducción a Composer - eng" href="http://getcomposer.org/doc/00-intro.md#introduction" target="_blank">Composer</a>, decirte que es un gestor de dependencias de PHP, es decir, una aplicación en la que tras crear el fichero <em>composer.json</em> y declaras las librerías o componentes necesitas es capaz de obtenerlas. Una vez configuradas las opciones de Composer en NetBeans estaremos listos para usarlo. NetBeans proporciona opciones para crear el <em>composer.json</em> inicial, actualizar y validar las dependencias.
+<h3>Ambiguous Comparison Hint</h3>
+Aunque esto es un cambio menor, no está demás mencionarlo. Bajo este nombre tan raro se encuentra un mecanismo que nos avisa sobre un posible error de asignación. Lo mejor será que lo explique con un ejemplo:
+<pre class="prettyprint">class MiClase
+{
+    public function miFuncion()
+    {
+        $a == 10; // Ambiguous Comparison Hint nos indica de un posible error
+    }
+}</pre>
+Cuando lo que realmente queríamos era esto:
+<pre class="prettyprint">class MiClase
+{
+    public function miFuncion()
+    {
+        return $a == 10;
+    }
+}</pre>
+<h3>Motor de plantillas Smarty</h3>
+<a title="Motor de plantillas para PHP Smarty" href="http://www.smarty.net/" target="_blank">Smarty</a> es otro motor de plantillas al estilo Twig muy usado en el mundo PHP. Las novedades de NetBeans 7.3 incluyen el <a href="https://blogs.oracle.com/netbeansphp/entry/smarty_tags_pairing_and_matching" target="_blank">resaltado de etiquetas y la generación de mensajes de advertencia cuando no se cierran correctamente</a>. Además, como Twig, también incluye <em>code templates </em>y soporte para <a href="https://blogs.oracle.com/netbeansphp/entry/smarty_configurable_comments_and_code" target="_blank">dos formas de realizar comentarios en las plantillas</a>.
