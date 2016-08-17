@@ -10,7 +10,7 @@ permalink: /toml-parser-0-2-0-available
 no_html_extension: true
 layout: post
 title: 'Toml parser 0.2.0 available'
-thumb_img: doc.png
+thumb_img: tools.png
 header_img:
   url: "header-toml.jpg"
 ---

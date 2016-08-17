@@ -8,7 +8,7 @@ permalink: /with-the-specification-of-toml-0-4-0-a-new-release-of-our-parser-is-
 no_html_extension: true
 layout: post
 title: 'With the specification of TOML 0.4.0 a new release of our parser is available'
-thumb_img: doc.png
+thumb_img: tools.png
 header_img:
   url: "header-toml.jpg"
 ---
