@@ -1,13 +1,13 @@
 ---
-author: victor
+author: víctor
 excerpt: ''
 categories:
     - Spress
-tags: {  }
 permalink: /talking-about-the-new-features-of-spress-1-1-on-the-latest-episode-of-drupodcast
 no_html_extension: true
 layout: post
 title: 'Talking about the new features of Spress 1.1.0 on the latest episode of Drupodcast'
+description: 'Presentation of Spress 1.1.0 on Drupodcast'
 thumb_img: spress.png
 header_img:
   url: "header-podcast.jpg"
