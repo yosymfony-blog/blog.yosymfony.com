@@ -15,7 +15,7 @@ header_img:
 <div class="post-preview">
     <a href="{{ site.url }}{{ post.url }}">
         {% if post.thumb_img %}
-        <div class="post-thumbnail" style="background-image:url('{{ site.url }}assets/img/{{ post.thumb_img }}');"></div>
+        <div class="post-thumbnail" style="background-image:url('{{ site.url }}/assets/img/{{ post.thumb_img }}');"></div>
         {% endif %}
         <h2 class="post-title">
             {{ post.title }}
@@ -26,7 +26,7 @@ header_img:
         </h3>
         {% endif %}
     </a>
-    <p class="post-meta">Posted by {{ post.author }} on {{ post.date | date('F jS \\a\\t g:ia') }}</p>
+    <p class="post-meta">Posted by {{ post.author }} on {{ post.date | date('F jS, Y') }}</p>
 </div>
 <hr>
 {% endfor %}

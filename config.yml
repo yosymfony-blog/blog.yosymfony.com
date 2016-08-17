@@ -1,5 +1,6 @@
 # Site settings
 title: "Yo! Symfony Blog"
+name: "Yo! Symfony"
 
 top_menu:
   - { name: Web, url: "http://yosymfony.com" }

@@ -1,0 +1,7 @@
+# Site configuration of production environment
+
+url: "http://blog.yosymfony.com" # Without end slash
+
+# Google Analytics
+google_analytics:
+    id: 'UA-82625127-1'

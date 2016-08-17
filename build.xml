@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Yo! Symfony blog" default="build">
+    <property name="dir.deploy" value="../Blog.yosymfony.com-rhcloud/" />
+    <property name="cmd.spress" value="spress" />
+    <property name="cmd.git" value="git" />
+
+    <target name="build">
+        <exec passthru="true" checkreturn="true" command="${cmd.spress} site:build"/>
+    </target>
+
+    <target name="deploy" depends="build-prod, clean-dir-deploy, copy-deploy-dir, deploy-git"/>
+
+    <target name="copy-deploy-dir">
+        <copy todir="${dir.deploy}" >
+            <fileset defaultexcludes="false" expandsymboliclinks="true" dir="./build">
+                <include name="**" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="deploy-git">
+        <exec passthru="true" checkreturn="true" command="${cmd.git} add -A" dir="${dir.deploy}"/>
+        <exec passthru="true" checkreturn="true" command="${cmd.git} commit -am'New deploy'" dir="${dir.deploy}"/>
+        <exec passthru="true" checkreturn="true" command="${cmd.git} push origin master" dir="${dir.deploy}"/>
+    </target>
+
+    <target name="build-prod">
+        <exec passthru="true" checkreturn="true" command="${cmd.spress} site:build --env=prod"/>
+    </target>
+
+    <target name="clean-dir-deploy">
+        <exec passthru="true" checkreturn="true" command="rm -rf *" dir="${dir.deploy}"/>
+    </target>
+</project>
