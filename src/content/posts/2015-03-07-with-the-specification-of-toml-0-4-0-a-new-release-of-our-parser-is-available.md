@@ -1,9 +1,8 @@
 ---
-author: victor
+author: víctor
 excerpt: ''
 categories:
     - PHP
-tags: {  }
 permalink: /with-the-specification-of-toml-0-4-0-a-new-release-of-our-parser-is-available
 no_html_extension: true
 layout: post
