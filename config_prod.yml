@@ -5,3 +5,8 @@ url: "http://blog.yosymfony.com" # Without end slash
 # Google Analytics
 google_analytics:
     id: 'UA-82625127-1'
+
+# Comments in posts
+comments:
+    enabled: true
+    disqus_shortname: yosymfony
