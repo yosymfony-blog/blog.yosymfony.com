@@ -3,14 +3,16 @@
 		{% if page.pagination.previous_page %}
 			<li class="previous">
                 <a href="{{ site.url }}{{ page.pagination.previous_page_url }}">
-                     &larr; Newer Posts
+                     &larr; {{ previous_text | default('Newer Posts') }}
                 </a>
             </li>
 		{% endif %}
 
 		{% if page.pagination.next_page %}
 			<li class="next">
-				<a href="{{ site.url }}{{ page.pagination.next_page_url }}">Older Posts &rarr;</a>
+				<a href="{{ site.url }}{{ page.pagination.next_page_url }}">
+                    {{ next_text | default('Older Posts') }} &rarr;
+                </a>
 			</li>
 		{% endif %}
 	</ul>
