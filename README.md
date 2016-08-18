@@ -5,7 +5,7 @@ This blob is based on [Clean blog theme](https://github.com/spress-add-ons/Clean
 ### How to install?
 
 * [Fork this repository](https://github.com/yosymfony/Blog.yosymfony.com/fork)
-* Clone it: ` https://github.com/YOUR-USER/Blog.yosymfony.com.git
+* Clone it: `git clone` https://github.com/YOUR-USER/Blog.yosymfony.com.git
 * Go to `Blog.yosymfony.com` folder
 * Run `spress site:build --server --watch`
 
