@@ -1,5 +1,5 @@
 ---
-author: victor
+author: víctor
 excerpt: ''
 categories:
     - PHP

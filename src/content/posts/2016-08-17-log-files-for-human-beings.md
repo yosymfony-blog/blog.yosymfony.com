@@ -3,8 +3,13 @@ layout: post
 title: "Log files for human beings"
 description: "Human-friendly Monolog handler for dev environments"
 author: Víctor
-categories: [php]
-tags: [monolog,log]
+categories:
+  - php
+tags:
+  - monolog
+  - log
+permalink: /2016/08/17/log-files-for-human-beings
+no_html_extension: true
 thumb_img: tools.png
 header_img:
   url: "header-files-bn.jpg"
