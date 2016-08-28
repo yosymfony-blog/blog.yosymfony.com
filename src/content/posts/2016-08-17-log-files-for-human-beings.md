@@ -19,7 +19,7 @@ header_img:
 At development time it's important to understand what is occurring inside your
 code to take appropriate actions. At that moment, debugger and logger tools
 have an importan role to play. Log files are a huge stream of text thought for
-computers instead of human that, sometimes, it tough to work with those.
+computers instead of human beings that, sometimes, it tough to work with those.
 
 Ok, we get to the point. [EasyLogHandler](https://github.com/EasyCorp/easy-log-handler)
 is a human-friendly [Monolog](https://github.com/Seldaek/monolog) handler
