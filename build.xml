@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Yo! Symfony blog" default="build">
-    <property name="dir.deploy" value="../Blog.yosymfony.com-rhcloud/web" />
+    <property name="dir.deploy" value="../yosymfony-blog.github.io" />
     <property name="cmd.spress" value="spress" />
     <property name="cmd.git" value="git" />
 
