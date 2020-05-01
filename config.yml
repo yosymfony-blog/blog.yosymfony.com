@@ -3,7 +3,7 @@ title: "Yo! Symfony Blog"
 name: "Yo! Symfony"
 
 top_menu:
-  - { name: Web, url: "http://yosymfony.com" }
+  - { name: Web, url: "https://yosymfony.com" }
 
 comments:
   enabled: false
